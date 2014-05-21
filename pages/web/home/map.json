@@ -1,0 +1,13 @@
+{
+    "res": {
+        "home.tpl": {
+            "uri": "home.html"
+        },
+        "home.css": {
+            "uri": "home.css"
+        },
+        "home.js": {
+            "uri": "home.js"
+        }
+    }
+}

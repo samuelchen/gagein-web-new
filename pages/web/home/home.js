@@ -1,1 +1,1 @@
-﻿alert("home")
+alert("home")
