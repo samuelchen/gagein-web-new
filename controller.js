@@ -31,11 +31,18 @@ var findResource = function(pathname){
     var files = fs.readdirSync(pathname);
     var pagePath;
     _.each(files,function(file){
-        var suffix = path.extname(file);
+        var suffix = path.extname(file),temppath;
         if(~[".html",".css"].indexOf(suffix) || (".js" == suffix && !/_controller/.test(file))){
-            json[suffix.substr(1)] = pathname+"\\" + file;
+              if(".html" != suffix){
+                    temppath = pathname.replace(__dirname+"\\" , "");
+                    temppath = temppath.replace(/\\/g,"/");
+                    json[suffix.substr(1)] = "/" + temppath + file;
+              }else{
+                  json[suffix.substr(1)] = pathname+"\\" + file;
+              }
         }
     });
+    console.log(json);
     return json;
 }
 
