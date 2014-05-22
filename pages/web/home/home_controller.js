@@ -5,7 +5,7 @@
  * Time: 下午2:33
  * To change this template use File | Settings | File Templates.
  */
-var base = require("./../../controller");
+var base = require("./../../../controller");
 module.exports = {
     getPageContent : function(callback){
         base.getPageContent(__dirname , function(tpl){

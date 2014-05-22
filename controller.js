@@ -58,10 +58,6 @@ function getWidgetContent(w,g,callback){
     })
 }
 
-
-
-
-
 function getPageContent(pathname,callback){
     var $,widgets;
     async.waterfall([
@@ -69,6 +65,7 @@ function getPageContent(pathname,callback){
             //获取资源
             var json = {};
             json = findResource(pathname);
+
             //var pathname = pathname + "\\"+ path.basename(pathname) + ".html";
             fs.readFile(pathname + "\\"+ path.basename(pathname) + ".html", 'utf8', function(err, data) {
                 $ = query.load(data);
