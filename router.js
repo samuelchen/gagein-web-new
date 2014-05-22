@@ -20,16 +20,23 @@ var fs = require('fs');
 var app = express();
 
 var _getController = function(req,res,cb){
-    //console.log("./web/" + req.params.page + "/home_controller");
-    //console.log(fs.existsSync("./web/" + req.params.page + "/home_controller.js"));
-    if(fs.existsSync("./web/" + req.params.page + "/home_controller.js")){
+    if(fs.existsSync(__dirname + "/pages/web/" + req.params.page + "/" + req.params.page + "_controller.js")){
         //console.log("./web/" + req.params.page + "/home_controller");
-        var controller = require("./web/" + req.params.page + "/home_controller");
+        var controller = require(__dirname + "/pages/web/" + req.params.page + "/" + req.params.page + "_controller");
         cb(controller);
     }
 }
 
-connect().use(connect.favicon())
+app.get(["/css/*","/image/*","/js/*"],function(req, res){
+    //console.log(req.header("host"));
+
+    if(~req.header("host").indexOf("static.gagein.com")){
+        //console.log(req.url);
+        fs.readFile(__dirname + "/static/" + req.url, 'utf8', function(err, data){
+            res.send(data);
+        })
+    }
+})
 
 app.get('/:page', function(req, res){
     if(req.params.page != "favicon.ico"){
@@ -53,6 +60,7 @@ app.get('/:page/widget/:widget', function(req, res){
 })
 
 app.listen(3000);
+
 
 
 
