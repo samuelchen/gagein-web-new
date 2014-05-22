@@ -12,13 +12,18 @@
  */
 
 //require webserver , middleware
-var express = require('express');
+var express = require("express");
 var connect = require("connect");
-var winstron = require("winstron");
-
-var fs = require('fs');
-
+var fs = require("fs");
 var app = express();
+var logger = require("./modules/logger");
+
+// middleware for logging requests
+app.use(function(req, res, next){
+    logger.info('Received ' + req.method + ' request ' + req.originalUrl + ' from ' + req.ip);
+    logger.debug('Query: ' + req.query);
+    next();
+});
 
 var _getController = function(req,res,cb){
     if(fs.existsSync(__dirname + "/pages/web/" + req.params.page + "/" + req.params.page + "_controller.js")){
@@ -29,7 +34,6 @@ var _getController = function(req,res,cb){
 }
 
 app.get(["/css/*","/image/*","/js/*"],function(req, res){
-    //console.log(req.header("host"));
 
     if(~req.header("host").indexOf("static.gagein.com")){
         //console.log(req.url);
@@ -40,6 +44,7 @@ app.get(["/css/*","/image/*","/js/*"],function(req, res){
 })
 
 app.get('/:page', function(req, res){
+
     if(req.params.page != "favicon.ico"){
         _getController(req,res,function(controller){
             controller.getPageContent(function(data){
@@ -51,6 +56,7 @@ app.get('/:page', function(req, res){
 })
 
 app.get('/:page/widget/:widget', function(req, res){
+
     _getController(req,res,function(controller){
         //console.log("get" + req.params.widget[0].toUpperCase() + req.params.widget.substr(1).toLowerCase() + "Content" );
         controller["get" + req.params.widget[0].toUpperCase() + req.params.widget.substr(1).toLowerCase() + "Content" ](req.params.widget,req.params.page,function(data){
@@ -60,6 +66,7 @@ app.get('/:page/widget/:widget', function(req, res){
     });
 })
 
+logger.info('Server Started');
 app.listen(3000);
 
 
