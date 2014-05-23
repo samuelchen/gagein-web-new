@@ -40,9 +40,6 @@ var _getController = function(req,res,cb){
     }
 }
 
-app.get(["/css/*","/image/*","/js/*"],function(req, res){
-    //console.log(req.header("host"));
-
 app.use(express.static(__dirname + "/"));
 
 app.get(["/js/*","/image/*","/css/*"],function(req, res){
@@ -54,7 +51,7 @@ app.get(["/js/*","/image/*","/css/*"],function(req, res){
             res.send(data);
         })
     }
-})
+});
 
 app.get('/:page', function(req, res){
 
@@ -66,7 +63,7 @@ app.get('/:page', function(req, res){
             })
         });
     }
-})
+});
 
 app.get('/:page/widget/:widget', function(req, res){
 
@@ -77,11 +74,11 @@ app.get('/:page/widget/:widget', function(req, res){
             res.send(data);
         })
     });
-})
+});
 
 logger.info('Server Started');
-app.listen(3000);
 
+app.listen(3000);
 
 
 
