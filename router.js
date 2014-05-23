@@ -9,11 +9,17 @@
      http://localhost:3000/home                         success
      http://localhost:3000/home/widget/bookmarks        success
      http://localhost:3000/home/widget/header           success
+
+     host
+     127.0.0.1 static.gagein.com
+
+     https://static.gagein.com:3000/js/base.js          success
  */
 
 //require webserver , middleware
 var express = require('express');
 var connect = require("connect");
+var https = require('https');
 
 var fs = require('fs');
 
@@ -27,12 +33,16 @@ var _getController = function(req,res,cb){
     }
 }
 
-app.get(["/css/*","/image/*","/js/*"],function(req, res){
-    //console.log(req.header("host"));
+
+app.use(express.static(__dirname + "/"));
+
+app.get(["/js/*","/image/*","/css/*"],function(req, res){
+    //console.log(req.header());
 
     if(~req.header("host").indexOf("static.gagein.com")){
         //console.log(req.url);
         fs.readFile(__dirname + "/static/" + req.url, 'utf8', function(err, data){
+            //console.log(data);
             res.send(data);
         })
     }
