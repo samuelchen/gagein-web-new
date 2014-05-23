@@ -20,9 +20,12 @@ var mustache = require('mustache');
 
 var query = require('cheerio');
 
+var logger = require('./modules/logger')
+
 //router 规则映射对应的文件处理
 
 var findResource = function(pathname){
+    logger.debug('findResource: ' + pathname);
     //查找资源文件
     var json = {};
     var files = fs.readdirSync(pathname);
