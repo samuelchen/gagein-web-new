@@ -173,7 +173,19 @@ module.exports = {
     findResource : findResource,
     getPageContent : getPageContent,
     getWidgetContent : getWidgetContent,
-    template : mustache
+    render : function(tpl,data){
+        var widget_common_path = "/widgets/web/common/";
+        var widget_path = "/widgets/web/";
+        var page_path = "/widgets/web/";
+
+        data = _.extend({
+            w_common_path : widget_common_path,
+            w_path : widget_path,
+            p_path : page_path
+        }, data);
+
+        return mustache.render(tpl,data);
+    }
 };
 
 
