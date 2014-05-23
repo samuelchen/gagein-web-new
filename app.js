@@ -40,18 +40,9 @@ var _getController = function(req,res,cb){
     }
 }
 
+
 app.use(express.static(__dirname + "/"));
-
-app.get(["/js/*","/image/*","/css/*"],function(req, res){
-    //console.log(req.header());
-
-    if(~req.header("host").indexOf("static.gagein.com")){
-        //console.log(req.url);
-        fs.readFile(__dirname + "/static/" + req.url, 'utf8', function(err, data){
-            res.send(data);
-        })
-    }
-});
+app.use(express.static(__dirname + "/static"));
 
 app.get('/:page', function(req, res){
 
@@ -78,7 +69,7 @@ app.get('/:page/widget/:widget', function(req, res){
 
 logger.info('Server Started');
 
-app.listen(3000);
+app.listen(80);
 
 
 

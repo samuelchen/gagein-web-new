@@ -141,8 +141,9 @@ function getPageContent(pathname,callback){
                 _.each(htmlpaths,function(hpath){
                     if(~hpath.indexOf(wtext)){
                         fs.readFile(hpath, 'utf8', function(err, data) {
-                            var parent = w.parent();
-                            parent.html(data);
+//                            var parent = w.parent();
+//                            parent.html(data);
+                            w.replaceWith(data)
                             callback();
                         })
                     }
@@ -160,7 +161,7 @@ function getPageContent(pathname,callback){
 
             q.drain = function() {
                 $("link").last().after(csscode);
-                $("body").after(jscode);
+                $("head script").last().after(jscode);
                 console.log("template processing done");
                 callback(null,$.html());
             }

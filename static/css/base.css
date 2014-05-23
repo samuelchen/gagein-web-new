@@ -52,7 +52,7 @@ address,caption,cite,code,dfn,em,th,var {
     font-weight:500;
 }
 
-ol,ul {
+ol,ul,li {
     list-style:none;
 }
 

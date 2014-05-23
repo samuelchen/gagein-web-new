@@ -1,1 +1,5 @@
-﻿
+﻿.filters {width:170px;}
+.filters-list {margin-bottom: 10px}
+.filters h3{ background: #fff url(image/icon-state.jpg) no-repeat scroll 0 7px;padding-left: 12px;}
+.filters h3:hover{cursor: pointer; }
+.filters h3.open{background-position: 0px -15px;}
