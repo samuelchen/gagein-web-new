@@ -9,12 +9,19 @@
      http://localhost:3000/home                         success
      http://localhost:3000/home/widget/bookmarks        success
      http://localhost:3000/home/widget/header           success
+
+     host
+     127.0.0.1 static.gagein.com
+
+     https://static.gagein.com:3000/js/base.js          success
  */
 
 //require webserver , middleware
 var express = require("express");
 var connect = require("connect");
-var fs = require("fs");
+
+var fs = require('fs');
+
 var app = express();
 var logger = require("./modules/logger");
 
@@ -33,7 +40,10 @@ var _getController = function(req,res,cb){
     }
 }
 
-app.get(["/css/*","/image/*","/js/*"],function(req, res){
+app.use(express.static(__dirname + "/"));
+
+app.get(["/js/*","/image/*","/css/*"],function(req, res){
+    //console.log(req.header());
 
     if(~req.header("host").indexOf("static.gagein.com")){
         //console.log(req.url);
@@ -41,7 +51,7 @@ app.get(["/css/*","/image/*","/js/*"],function(req, res){
             res.send(data);
         })
     }
-})
+});
 
 app.get('/:page', function(req, res){
 
@@ -53,7 +63,7 @@ app.get('/:page', function(req, res){
             })
         });
     }
-})
+});
 
 app.get('/:page/widget/:widget', function(req, res){
 
@@ -64,11 +74,11 @@ app.get('/:page/widget/:widget', function(req, res){
             res.send(data);
         })
     });
-})
+});
 
 logger.info('Server Started');
-app.listen(3000);
 
+app.listen(3000);
 
 
 

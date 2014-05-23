@@ -36,13 +36,13 @@ var findResource = function(pathname){
               if(".html" != suffix){
                     temppath = pathname.replace(__dirname+"\\" , "");
                     temppath = temppath.replace(/\\/g,"/");
-                    json[suffix.substr(1)] = "/" + temppath + file;
+                    json[suffix.substr(1)] = "/" + temppath + "/" + file;
               }else{
                   json[suffix.substr(1)] = pathname+"\\" + file;
               }
         }
     });
-    console.log(json);
+    //console.log(json);
     return json;
 }
 
@@ -126,9 +126,9 @@ function getPageContent(pathname,callback){
         },
         function(json,callback){
             //处理js
-            var jscode = json.js.join("");
+            var jscode = "\n" + json.js.join("\n");
             //处理css
-            var csscode = json.css.join("");
+            var csscode = "\n" + json.css.join("\n");
             //处理html
             var htmlpaths = json.html;
 
@@ -158,7 +158,7 @@ function getPageContent(pathname,callback){
             });
 
             q.drain = function() {
-                $("head").append(csscode);
+                $("link").last().after(csscode);
                 $("body").after(jscode);
                 console.log("template processing done");
                 callback(null,$.html());
@@ -173,7 +173,19 @@ module.exports = {
     findResource : findResource,
     getPageContent : getPageContent,
     getWidgetContent : getWidgetContent,
-    template : mustache
+    render : function(tpl,data){
+        var widget_common_path = "/widgets/web/common/";
+        var widget_path = "/widgets/web/";
+        var page_path = "/widgets/web/";
+
+        data = _.extend({
+            w_common_path : widget_common_path,
+            w_path : widget_path,
+            p_path : page_path
+        }, data);
+
+        return mustache.render(tpl,data);
+    }
 };
 
 

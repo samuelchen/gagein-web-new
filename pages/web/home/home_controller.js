@@ -6,14 +6,16 @@
  * To change this template use File | Settings | File Templates.
  */
 var base = require("./../../../controller");
+
+
+
 module.exports = {
     getPageContent : function(callback){
         base.getPageContent(__dirname , function(tpl){
             var data = {
                 title : "gagein web prototype"
             }
-            var html = base.template.render(tpl,data);
-            callback(html);
+            callback(base.render(tpl,data));
         });
     },
     //命名规则 ， get +　widgetname(首字母大写)　＋　Content
@@ -22,8 +24,7 @@ module.exports = {
             var data = {
                 title : "gagein web prototype"
             }
-            var html = base.template.render(tpl,data);
-            callback(html);
+            callback(base.render(tpl,data));
         });
     },
     getFiltersContent : function(widgetname , pagename ,callback){
@@ -31,8 +32,7 @@ module.exports = {
             var data = {
                 title : "gagein web prototype"
             }
-            var html = base.template.render(tpl,data);
-            callback(html);
+            callback(base.render(tpl,data));
         });
     },
     getHeaderContent : function(widgetname , pagename ,callback){
@@ -40,8 +40,7 @@ module.exports = {
             var data = {
                 title : "gagein web prototype"
             }
-            var html = base.template.render(tpl,data);
-            callback(html);
+            callback(base.render(tpl,data));
         });
     }
 }
