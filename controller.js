@@ -33,13 +33,13 @@ var findResource = function(pathname){
               if(".html" != suffix){
                     temppath = pathname.replace(__dirname+"\\" , "");
                     temppath = temppath.replace(/\\/g,"/");
-                    json[suffix.substr(1)] = "/" + temppath + file;
+                    json[suffix.substr(1)] = "/" + temppath + "/" + file;
               }else{
                   json[suffix.substr(1)] = pathname+"\\" + file;
               }
         }
     });
-    console.log(json);
+    //console.log(json);
     return json;
 }
 
