@@ -21,6 +21,7 @@ var mustache = require('mustache');
 var query = require('cheerio');
 
 var logger = require('./modules/logger')
+var config = require('./config')
 
 //router 规则映射对应的文件处理
 
@@ -47,10 +48,10 @@ var findResource = function(pathname){
 }
 
 function getWidgetContent(w,g,callback){
-    var pathname = path.resolve("/gagein-web-new/widgets/web/",g+"/"+w);
+    var pathname = path.resolve(path.join(config.rootDir, "widgets/web"),g+"/"+w);
 
     if(!fs.existsSync(pathname)){
-        pathname = path.resolve("/gagein-web-new/widgets/web/","common/"+w);
+        pathname = path.resolve(path.join(config.rootDir, "widgets/web"),"common/"+w);
     }
     var resource = findResource(pathname);
 
@@ -88,7 +89,7 @@ function getPageContent(pathname,callback){
                 //获取每个widget
                 _.each(widgets,function(ele){
                     var widget_path = ele.children[0].data.replace(".","/");
-                    widget_path = path.resolve("/gagein-web-new/widgets/web/",widget_path);
+                    widget_path = path.resolve( path.join(config.rootDir, "widgets/web"), widget_path);
                     json.widgets.push(findResource(widget_path));
                 })
                 console.log("get resources done!");
