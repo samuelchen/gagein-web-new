@@ -126,9 +126,9 @@ function getPageContent(pathname,callback){
         },
         function(json,callback){
             //处理js
-            var jscode = json.js.join("");
+            var jscode = "\n" + json.js.join("\n");
             //处理css
-            var csscode = json.css.join("");
+            var csscode = "\n" + json.css.join("\n");
             //处理html
             var htmlpaths = json.html;
 
@@ -158,7 +158,7 @@ function getPageContent(pathname,callback){
             });
 
             q.drain = function() {
-                $("head").append(csscode);
+                $("link").last().after(csscode);
                 $("body").after(jscode);
                 console.log("template processing done");
                 callback(null,$.html());

@@ -1,5 +1,12 @@
-﻿.header{}
+.header{
+    width:750px;
+    margin : 0 auto;
+}
+.header-logo{display: block;width:87px; height:26px;}
 
-.icon_news{}
-.icon_companies{}
-.icon_settings{}
+.header ul li{float:left;height:27px;background: #00FF00 no-repeat fixed 0 0;}
+.header-icon-news{width: 21px;background-image: url(image/icon_news.jpg) }
+.header-icon-companies{width: 43px;background-image: url(image/icon_company.jpg)}
+.header-icon-settings{width: 32px;background-image: url(image/icon_settings.jpg)}
+
+.header-search-btn{}
