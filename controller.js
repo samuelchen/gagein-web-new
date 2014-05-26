@@ -43,15 +43,15 @@ var findResource = function(pathname){
               }
         }
     });
-    //console.log(json);
+    //logger.debug(json);
     return json;
 }
 
 function getWidgetContent(w,g,callback){
-    var pathname = path.resolve(path.join(config.rootDir, "widgets/web"),g+"/"+w);
+    var pathname = path.resolve(path.join(config.dir.root, "widgets/web"),g+"/"+w);
 
     if(!fs.existsSync(pathname)){
-        pathname = path.resolve(path.join(config.rootDir, "widgets/web"),"common/"+w);
+        pathname = path.resolve(path.join(config.dir.root, "widgets/web"),"common/"+w);
     }
     var resource = findResource(pathname);
 
@@ -93,10 +93,10 @@ function getPageContent(pathname,callback){
                 //获取每个widget
                 _.each(widgets,function(ele){
                     var widget_path = ele.children[0].data.replace(".","/");
-                    widget_path = path.resolve( path.join(config.rootDir, "widgets/web"), widget_path);
+                    widget_path = path.resolve( path.join(config.dir.root, "widgets/web"), widget_path);
                     json.widgets.push(findResource(widget_path));
                 })
-                console.log("get resources done!");
+                logger.debug("get resources done!");
                 callback(null,json);
             })
         },
@@ -122,7 +122,7 @@ function getPageContent(pathname,callback){
             var js = getFileByType("js");
             var html = getFileByType("html");
 
-            console.log("Resource classification done!");
+            logger.debug("Resource classification done!");
             callback(null,{
                 css : css,
                 js : js,
@@ -157,7 +157,7 @@ function getPageContent(pathname,callback){
             _.each(widgets,function(widget,index){
                 (function(idx){
                     q.push({widget: widget}, function (err) {
-                        console.log('finished processing : ' + $(widget).text());
+                        logger.debug('finished processing : ' + $(widget).text());
                     })
                 })(index)
 
@@ -180,14 +180,15 @@ module.exports = {
     getPageContent : getPageContent,
     getWidgetContent : getWidgetContent,
     render : function(tpl,data){
-        var widget_common_path = "/widgets/web/common/";
-        var widget_path = "/widgets/web/";
-        var page_path = "/widgets/web/";
+        var widget_common_path = "/widgets/web/common";
+        var widget_path =  "/widgets/web";
+        var page_path = "/page/web";
 
         data = _.extend({
-            w_common_path : widget_common_path,
-            w_path : widget_path,
-            p_path : page_path
+            widget_common_path : widget_common_path,
+            widget_path : widget_path,
+            page_path : page_path,
+            config : config
         }, data);
 
         return mustache.render(tpl,data);

@@ -19,37 +19,35 @@
 //require webserver , middleware
 var express = require("express");
 var connect = require("connect");
-
 var fs = require('fs');
 
 var app = express();
 var logger = require("./modules/logger");
+var config = require("./config");
 
-// middleware for logging requests
+// middleware to log all requests
 app.use(function(req, res, next){
     logger.info('Received ' + req.method + ' request ' + req.originalUrl + ' from ' + req.ip);
-    logger.debug('Query: ' + req.query);
     next();
 });
 
 var _getController = function(req,res,cb){
-    if(fs.existsSync(__dirname + "/pages/web/" + req.params.page + "/" + req.params.page + "_controller.js")){
-        //console.log("./web/" + req.params.page + "/home_controller");
+    if(fs.existsSync(config.dir.root + "/pages/web/" + req.params.page + "/" + req.params.page + "_controller.js")){
+        //logger.debug("./web/" + req.params.page + "/home_controller");
         var controller = require(__dirname + "/pages/web/" + req.params.page + "/" + req.params.page + "_controller");
         cb(controller);
     }
-}
+};
 
-
-app.use(express.static(__dirname + "/"));
-app.use(express.static(__dirname + "/static"));
+app.use(express.static(config.dir.root + "/"));
+app.use(express.static(config.dir.root + "/static"));
 
 app.get('/:page', function(req, res){
 
     if(req.params.page != "favicon.ico"){
         _getController(req,res,function(controller){
             controller.getPageContent(function(data){
-                console.log("page success!");
+                logger.debug("page success!");
                 res.send(data);
             })
         });
@@ -59,9 +57,9 @@ app.get('/:page', function(req, res){
 app.get('/:page/widget/:widget', function(req, res){
 
     _getController(req,res,function(controller){
-        //console.log("get" + req.params.widget[0].toUpperCase() + req.params.widget.substr(1).toLowerCase() + "Content" );
+        //logger.debug("get" + req.params.widget[0].toUpperCase() + req.params.widget.substr(1).toLowerCase() + "Content" );
         controller["get" + req.params.widget[0].toUpperCase() + req.params.widget.substr(1).toLowerCase() + "Content" ](req.params.widget,req.params.page,function(data){
-            console.log("widget success!");
+            logger.debug("widget success!");
             res.send(data);
         })
     });
