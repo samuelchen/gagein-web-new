@@ -1,1 +1,8 @@
 ﻿.bookmarks{width:165px;}
+.bookmarks li{margin-bottom: 18px;}
+.bookmarks-content{height:140px;overflow: hidden;}
+
+.bookmarks .bookmarks-more{color:#ff8031}
+
+.bookmarks .bookmarks-content.open{overflow: visible;}
+.bookmarks .bookmarks-more{diplay:inline}

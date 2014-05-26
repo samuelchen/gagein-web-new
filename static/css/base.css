@@ -76,7 +76,7 @@ sup {top: -0.5em;}
 sub {bottom: -0.25em;}
 
 a:hover {
-    text-decoration:underline;
+    text-decoration:none;
 }
 
 ins,a {
@@ -107,4 +107,8 @@ body .fn-hide {
 }
 .fn-right {
     float:right;
+}
+
+.fn-inline{
+    display: inline-block;*display: inline;*zoom: 1;
 }
