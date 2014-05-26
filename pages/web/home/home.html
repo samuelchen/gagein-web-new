@@ -1,28 +1,31 @@
 <!doctype html>
 <html lang="en">
-<head>
+<head ng-app>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <title>gagein web new</title>
     <meta name="description" content="gagein web new prototype">
 
     <link rel="stylesheet" href="{{{config.host.protocol}}}://{{{config.host.static}}}/css/base.css" type="text/css">
+    <link rel="stylesheet" href="{{{config.host.protocol}}}://{{{config.host.static}}}/css/web/member.css" type="text/css">
 
     <script src="{{{config.host.protocol}}}://{{{config.hostStatic}}}/js/base.js"></script>
     <script src="{{{config.host.protocol}}}://{{{config.hostStatic}}}/js/angular1.2.16.js"></script>
+
 </head>
 <body>
-    <div>
-        <widget>common.header</widget>
+<div class="fn-clear"><widget>common.header</widget></div>
+<div class="content fn-clear">
+    <div class="content-nav"></div>
+    <div class="content-cnt">
+        <widget>home.filters</widget>
+        <widget>home.news</widget>
+        <widget>home.bookmarks</widget>
     </div>
-    <div id="content">
-        <div id="news"><widget>home.news</widget></div>
-        <div id="filters"><widget>home.filters</widget></div>
-        <div id="bookmarks"><widget>home.bookmarks</widget></div>
-    </div>
-    <div>
-        <div id="footer"><widget>common.footer</widget></div>
-    </div>
+</div>
+<div>
+    <div><widget>common.footer</widget></div>
+</div>
 </body>
 </html>
 

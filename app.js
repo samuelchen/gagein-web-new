@@ -18,13 +18,12 @@
 
 //require webserver , middleware
 var express = require("express");
-var connect = require("connect");
 
 var fs = require('fs');
 
 var app = express();
 var logger = require("./modules/logger");
-var config = require("./config")
+var config = require("./config");
 
 // middleware to log all requests
 app.use(function(req, res, next){
@@ -38,20 +37,10 @@ var _getController = function(req,res,cb){
         var controller = require(__dirname + "/pages/web/" + req.params.page + "/" + req.params.page + "_controller");
         cb(controller);
     }
-}
+};
 
-app.use(express.static(__dirname + "/"));
-
-app.get(["/js/*","/image/*","/css/*"],function(req, res){
-    //logger.debug(req.header());
-
-    if(~req.header("host").indexOf(config.host.static)){
-        //logger.debug(req.url);
-        fs.readFile(config.dir.root + "/static/" + req.url, 'utf8', function(err, data){
-            res.send(data);
-        })
-    }
-});
+app.use(express.static(config.dir.root + "/"));
+app.use(express.static(config.dir.root + "/static"));
 
 app.get('/:page', function(req, res){
 
@@ -78,7 +67,7 @@ app.get('/:page/widget/:widget', function(req, res){
 
 logger.info('Server Started');
 
-app.listen(3000);
+app.listen(80);
 
 
 

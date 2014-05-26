@@ -63,8 +63,12 @@ function getWidgetContent(w,g,callback){
 
     fs.readFile(htmlpath, 'utf8', function(err, data){
         $ = query.load(data);
-        $("head").append(csscode);
-        $("head").append(jscode);
+        if(config.isDebug){
+            $.root().append('<link rel="stylesheet" href="http://static.gagein.com/css/base.css" type="text/css">');
+            $.root().append('<link rel="stylesheet" href="http://static.gagein.com/css/web/member.css" type="text/css">');
+        }
+        $.root().append(csscode);
+        $.root().append(jscode);
         callback($.html());
     })
 }
@@ -141,8 +145,9 @@ function getPageContent(pathname,callback){
                 _.each(htmlpaths,function(hpath){
                     if(~hpath.indexOf(wtext)){
                         fs.readFile(hpath, 'utf8', function(err, data) {
-                            var parent = w.parent();
-                            parent.html(data);
+//                            var parent = w.parent();
+//                            parent.html(data);
+                            w.replaceWith(data)
                             callback();
                         })
                     }
@@ -160,8 +165,8 @@ function getPageContent(pathname,callback){
 
             q.drain = function() {
                 $("link").last().after(csscode);
-                $("body").after(jscode);
-                logger.debug("template processing done");
+                $("head script").last().after(jscode);
+                console.log("template processing done");
                 callback(null,$.html());
             }
         }

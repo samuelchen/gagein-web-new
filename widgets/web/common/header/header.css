@@ -1,12 +1,15 @@
 .header{
-    width:750px;
+    width:780px;
     margin : 0 auto;
+    padding-top: 21px;
 }
-.header-logo{display: block;width:87px; height:26px;}
+.header-logo{display: block;width:87px; height:26px;float:left}
 
-.header ul li{float:left;height:27px;background: #00FF00 no-repeat fixed 0 0;}
-.header-icon-news{width: 21px;background-image: url(image/icon_news.jpg) }
-.header-icon-companies{width: 43px;background-image: url(image/icon_company.jpg)}
-.header-icon-settings{width: 32px;background-image: url(image/icon_settings.jpg)}
+.header ul{float:left;width:135px;margin-left: 335px;}
+.header-icon a{float:left;height:27px;background:no-repeat scroll 0 0;margin-left:10px;text-indent: -9999px; }
+.header-icon-news a{width: 21px;background-image:  url(image/icon_news.jpg)}
+.header-icon-companies a{width: 43px;background-image:url(image/icon_company.jpg) }
+.header-icon-settings a{width: 32px;background-image: url(image/icon_settings.jpg)}
 
-.header-search-btn{}
+.header-search{float:left;margin-left: 20px;text-align: right; }
+.header-search-btn{display: block;width:142px;height:20px;background-image:url(image/search_btn.jpg);}

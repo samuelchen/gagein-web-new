@@ -6,6 +6,8 @@
 
 var path = require('path');
 
+exports.isDebug = true;
+
 // physical path
 exports.dir = {
     root: __dirname

@@ -1,1 +1,12 @@
-﻿
+﻿.filters {width:170px;margin-right: 20px;}
+.filters-list {margin-bottom: 10px;}
+.fiters-list h3{ background: #fff url(image/icon-state.jpg) no-repeat scroll 0 7px;padding-left: 12px;}
+.fiters-list h3:hover{cursor: pointer; }
+.fiters-list.open h3{background-position: 0px -15px;}
+
+.fiters-list ul{padding-top: 12px;padding-left: 12px;}
+.fiters-list ul li{margin-bottom: 5px;}
+.filters-search-icon {background: #fff url(image/icon-search.jpg) no-repeat scroll 0 0px;width:10px;height:10px;margin-right: 5px;vertical-align: middle}
+.fiters-list input{margin-right: 5px;}
+.fiters-list input[type=radio]{position: relative;top:2px;}
+.fiters-list input[type=text]{width:100px;border: 0 none;}
