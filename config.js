@@ -6,6 +6,26 @@
 
 var path = require('path');
 
-exports.rootDir = __dirname;
-exports.logDebug =  path.join(__dirname, 'debug.log');
-exports.logException = path.join(__dirname, 'exception.log');
+// physical path
+exports.dir = {
+    root: __dirname
+}
+
+// log related
+exports.log = {
+    path: {
+        debug:  path.join(__dirname, 'debug.log'),
+        exception: path.join(__dirname, 'exception.log')
+    },
+    level: {
+        console: 'debug',
+        file: 'info'
+    }
+}
+
+// url mapping related.
+exports.host = {
+    name: 'localhost:3000',
+    static: 'localhost:3000/static',
+    protocol: 'http'
+}
