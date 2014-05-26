@@ -27,7 +27,7 @@ exports.log = {
 
 // url mapping related.
 exports.host = {
-    name: 'localhost:3000',
-    static: 'localhost:3000/static',
+    name: 'localhost',
+    static: 'localhost/static',
     protocol: 'http'
 }
