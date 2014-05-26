@@ -1,31 +1,35 @@
-<div class="filters mode">
+<div class="filters mode" ng-controller="filter">
     <h2 class="nav">Filter</h2>
     <div class="fiters-list filters-triggers">
         <h3 class="black-h2">News Triggers</h3>
         <ul class="gray-cnt">
-            <li><input type="radio" name="triggers" checked/>All</li>
-            <li><input type="radio" name="triggers"/>Awards & Certifications</li>
-            <li><input type="radio" name="triggers"/>Business Challenges</li>
-            <li><input type="radio" name="triggers"/>Contracts</li>
-            <li><input type="radio" name="triggers"/>Funding</li>
-            <li><input type="radio" name="triggers"/>Growth & Expansion</li>
-            <li><input type="radio" name="triggers"/>Hiring & Recruiting</li>
-            <li><input type="radio" name="triggers"/>Litigations</li>
-            <li><input type="radio" name="triggers"/>Mergers & Aquisitions</li>
-            <li><input type="radio" name="triggers"/>Offerings</li>
-            <li><input type="radio" name="triggers"/>Partnerships</li>
-            <li><input type="radio" name="triggers"/>Personnel Changes</li>
-            <li><input type="radio" name="triggers"/>Real Estate</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" checked/>All</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Awards & Certifications</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Business Challenges</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Contracts</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Funding</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Growth & Expansion</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Hiring & Recruiting</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Litigations</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Mergers & Aquisitions</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Offerings</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Partnerships</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Personnel Changes</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Real Estate</li>
             <li>
-                <span class="filters-search-icon fn-inline"></span><input type="text" placeholder="text" class="gray-cnt"/>
+                <span class="filters-search-icon fn-inline"></span><input type="text" placeholder="text" class="gray-cnt" ng-model="filter.search"/>
             </li>
         </ul>
     </div>
     <div class="fiters-list filters-relevance open">
         <h3 class="black-h2">News Relevance</h3>
         <ul class="gray-cnt">
-            <li><input type="radio" name="relevance" checked/>More Relevant</li>
-            <li><input type="radio" name="relevance"/>More News</li>
+            <li><input type="radio" name="relevance"  ng-model="filter.relevance" checked/>More Relevant</li>
+            <li><input type="radio" name="relevance"  ng-model="filter.relevance"/>More News</li>
         </ul>
     </div>
+
+    <div>triggers : {{filter.trigger}}</div>
+    <div>search : {{filter.search}}</div>
+    <div>relevance : {{filter.relevance}}</div>
 </div>
