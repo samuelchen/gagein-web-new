@@ -63,8 +63,12 @@ function getWidgetContent(w,g,callback){
 
     fs.readFile(htmlpath, 'utf8', function(err, data){
         $ = query.load(data);
-        $("head").append(csscode);
-        $("head").append(jscode);
+        if(config.isDebug){
+            $.root().append('<link rel="stylesheet" href="http://static.gagein.com/css/base.css" type="text/css">');
+            $.root().append('<link rel="stylesheet" href="http://static.gagein.com/css/web/member.css" type="text/css">');
+        }
+        $.root().append(csscode);
+        $.root().append(jscode);
         callback($.html());
     })
 }

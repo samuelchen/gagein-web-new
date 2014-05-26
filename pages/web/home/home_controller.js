@@ -7,8 +7,6 @@
  */
 var base = require("./../../../controller");
 
-
-
 module.exports = {
     getPageContent : function(callback){
         base.getPageContent(__dirname , function(tpl){
@@ -20,6 +18,14 @@ module.exports = {
     },
     //命名规则 ， get +　widgetname(首字母大写)　＋　Content
     getBookmarksContent : function(widgetname , pagename ,callback){
+        base.getWidgetContent(widgetname, pagename  , function(tpl){
+            var data = {
+                title : "gagein web prototype"
+            }
+            callback(base.render(tpl,data));
+        });
+    },
+    getNewsContent : function(widgetname , pagename ,callback){
         base.getWidgetContent(widgetname, pagename  , function(tpl){
             var data = {
                 title : "gagein web prototype"
