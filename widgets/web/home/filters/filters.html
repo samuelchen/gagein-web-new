@@ -1,8 +1,8 @@
 <div class="filters mode" ng-controller="filter">
     <h2 class="nav">Filter</h2>
-    <div class="fiters-list filters-triggers">
-        <h3 class="black-h2">News Triggers</h3>
-        <ul class="gray-cnt">
+    <div class="fiters-list filters-triggers " ng-class="{open : is_triggers_open}" >
+        <h3 class="black-h2" ng-click="open($event,'triggers')">News Triggers</h3>
+        <ul class="gray-cnt " ng-class="{fhide : !is_triggers_open}">
             <li><input type="radio" name="triggers" ng-model="filter.trigger" checked value="0"/>All</li>
             <li><input type="radio" name="triggers" ng-model="filter.trigger" value="1"/>Awards & Certifications</li>
             <li><input type="radio" name="triggers" ng-model="filter.trigger" value="2"/>Business Challenges</li>
@@ -17,13 +17,13 @@
             <li><input type="radio" name="triggers" ng-model="filter.trigger" value="11" />Personnel Changes</li>
             <li><input type="radio" name="triggers" ng-model="filter.trigger" value="12" />Real Estate</li>
             <li>
-                <span class="filters-search-icon fn-inline"></span><input type="text" placeholder="text" class="gray-cnt" ng-model="filter.search"/>
+                <span class="filters-search-icon finline"></span><input type="text" placeholder="text" class="gray-cnt" ng-model="filter.search"/>
             </li>
         </ul>
     </div>
-    <div class="fiters-list filters-relevance open">
-        <h3 class="black-h2">News Relevance</h3>
-        <ul class="gray-cnt">
+    <div class="fiters-list filters-relevance" ng-class="{open : is_relevance_open}">
+        <h3 class="black-h2" ng-click="open($event,'relevance')">News Relevance</h3>
+        <ul class="gray-cnt" ng-class="{fhide : !is_relevance_open}">
             <li><input type="radio" name="relevance"  ng-model="filter.relevance" checked value="0"/>More Relevant</li>
             <li><input type="radio" name="relevance"  ng-model="filter.relevance" value="1"/>More News</li>
         </ul>

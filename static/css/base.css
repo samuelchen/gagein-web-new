@@ -83,7 +83,7 @@ ins,a {
     text-decoration:none;
 }
 
-.fn-clear:after {
+.fclear:after {
     visibility:hidden;
     display:block;
     font-size:0;
@@ -91,24 +91,24 @@ ins,a {
     clear:both;
     height:0;
 }
-.fn-clear {
+.fclear {
     zoom:1;
 }
 
-body .fn-hide {
+body .fhide {
     display:none;
 }
 
-.fn-left,.fn-right {
+.fl,.fr {
     display:inline;
 }
-.fn-left {
+.fl {
     float:left;
 }
-.fn-right {
+.fr {
     float:right;
 }
 
-.fn-inline{
+.finline{
     display: inline-block;*display: inline;*zoom: 1;
 }

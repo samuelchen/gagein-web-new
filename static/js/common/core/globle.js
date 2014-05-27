@@ -1,6 +1,8 @@
-define(['angular'],function (ng) {
-    return {
-        ng : ng,
-        app : ng.module("app",[])
-    };
+define(['angular',"underscore"],function (ng,_) {
+
+
+    return _.extend(ng , {
+        app : ng.module("app",[]),
+        _ : _
+    });
 })
