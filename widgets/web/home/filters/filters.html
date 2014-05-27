@@ -3,19 +3,19 @@
     <div class="fiters-list filters-triggers">
         <h3 class="black-h2">News Triggers</h3>
         <ul class="gray-cnt">
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" checked/>All</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Awards & Certifications</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Business Challenges</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Contracts</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Funding</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Growth & Expansion</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Hiring & Recruiting</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Litigations</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Mergers & Aquisitions</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Offerings</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Partnerships</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Personnel Changes</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" />Real Estate</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" checked value="0"/>All</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="1"/>Awards & Certifications</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="2"/>Business Challenges</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="3"/>Contracts</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="4"/>Funding</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="5"/>Growth & Expansion</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="6"/>Hiring & Recruiting</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="7"/>Litigations</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="8"/>Mergers & Aquisitions</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="9"/>Offerings</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="10" />Partnerships</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="11" />Personnel Changes</li>
+            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="12" />Real Estate</li>
             <li>
                 <span class="filters-search-icon fn-inline"></span><input type="text" placeholder="text" class="gray-cnt" ng-model="filter.search"/>
             </li>
@@ -24,12 +24,16 @@
     <div class="fiters-list filters-relevance open">
         <h3 class="black-h2">News Relevance</h3>
         <ul class="gray-cnt">
-            <li><input type="radio" name="relevance"  ng-model="filter.relevance" checked/>More Relevant</li>
-            <li><input type="radio" name="relevance"  ng-model="filter.relevance"/>More News</li>
+            <li><input type="radio" name="relevance"  ng-model="filter.relevance" checked value="0"/>More Relevant</li>
+            <li><input type="radio" name="relevance"  ng-model="filter.relevance" value="1"/>More News</li>
         </ul>
     </div>
 
-    <div>triggers : {{filter.trigger}}</div>
-    <div>search : {{filter.search}}</div>
-    <div>relevance : {{filter.relevance}}</div>
+    {{#config.isDebug}}
+        <div>triggers : <span ng-bind="filter.trigger"></span></div>
+        <div>search : <span ng-bind="filter.search"></span></div>
+        <div>relevance : <span ng-bind="filter.relevance"></span></div>
+    {{/config.isDebug}}
+
+
 </div>
