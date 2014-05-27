@@ -20,16 +20,43 @@
 var express = require("express");
 var connect = require("connect");
 var fs = require('fs');
+var i18n = require('i18n');
+var cons = require('consolidate');
 
-var app = express();
 var logger = require("./modules/logger");
 var config = require("./config");
+var app = express();
+
+app.engine('html', cons.mustache);
 
 // middleware to log all requests
 app.use(function(req, res, next){
     logger.info('Received ' + req.method + ' request ' + req.originalUrl + ' from ' + req.ip);
     next();
 });
+app.use(express.static(config.dir.root + "/"));
+app.use(express.static(config.dir.root + "/static"));
+//app.use(express.cookieParser());
+
+// init i18n module for this loop
+app.use(i18n.init);
+
+// register helper as a locals function wrapped as mustache expects
+app.use(function (req, res, next) {
+    i18n.init(req, res);
+    logger.warn('>>>> i18 initialized.');
+    // mustache helper
+    res.locals.__ = function () {
+        logger.warn('>>>> i18 applied.');
+        return function (text, render) {
+            logger.warn('>>>> i18 executed.');
+            return i18n.__.apply(req, arguments);
+        };
+    };
+
+    next();
+});
+
 
 var _getController = function(req,res,cb){
     if(fs.existsSync(config.dir.root + "/pages/web/" + req.params.page + "/" + req.params.page + "_controller.js")){
@@ -39,10 +66,10 @@ var _getController = function(req,res,cb){
     }
 };
 
-app.use(express.static(config.dir.root + "/"));
-app.use(express.static(config.dir.root + "/static"));
-
 app.get('/:page', function(req, res){
+
+    var x = res.__('hello world');
+    logger.warn(x);
 
     if(req.params.page != "favicon.ico"){
         _getController(req,res,function(controller){
