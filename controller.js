@@ -1,7 +1,3 @@
-//require webserver , middleware
-var express = require('express');
-var connect = require("connect");
-
 //require file , path
 var fs=require('fs');
 var path = require('path');
@@ -11,9 +7,6 @@ var _ = require("underscore");
 
 //require async , Processing an asynchronous file operations
 var async = require('async');
-
-//set webserver
-var app = express();
 
 //set engine
 var mustache = require('mustache');
@@ -166,7 +159,7 @@ function getPageContent(pathname,callback){
             q.drain = function() {
                 $("link").last().after(csscode);
                 $("head script").last().after(jscode);
-                console.log("template processing done");
+                logger.debug("template processing done");
                 callback(null,$.html());
             }
         }

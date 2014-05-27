@@ -5,6 +5,7 @@
  */
 
 var path = require('path');
+var i18n = require('i18n');
 
 exports.isDebug = true;
 
@@ -31,3 +32,11 @@ exports.host = {
     static: 'static.gagein.com',
     protocol: 'http'
 }
+
+// i18n configures
+i18n.configure({
+    locales:['en', 'zh'],
+    defaultLocale: 'en',
+    directory: path.join(__dirname, '/locales'),
+    cookie: 'locale'
+});
