@@ -1,8 +1,9 @@
 ﻿.news{ width:410px;}
 
 .news-list li{padding-top: 15px}
-.news-list .news-list-first{padding-top: 0;}
-.news-list .news-list-last .news-list-r{border-bottom: 0px;padding-bottom: 0px;}
+.news-list li:first-child{padding-top: 0;}
+.news-list li:last-child .news-list-r{border-bottom: 0px;padding-bottom: 0px;}
+
 
 .news-list-r{width:350px;border-bottom: 2px solid #f5f5f5;padding-bottom: 25px;}
 .news-list-r h2{font-size:14px;margin-bottom: 10px;}

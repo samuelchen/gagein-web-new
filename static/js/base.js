@@ -13,7 +13,6 @@ require.config({
         underscore : {
             exports: 'underscore'
         }
-
     }
 });
 

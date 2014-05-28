@@ -40,11 +40,13 @@ var findResource = function(pathname){
     return json;
 }
 
-function getWidgetContent(w,g,callback){
-    var pathname = path.resolve(path.join(config.dir.root, "widgets/web"),g+"/"+w);
+function getWidgetContent(req){
+    var widget = req.param.widget,
+        page = req.param.page;
+    var pathname = path.resolve(path.join(config.dir.root, "widgets/web"),page+"/"+widget);
 
     if(!fs.existsSync(pathname)){
-        pathname = path.resolve(path.join(config.dir.root, "widgets/web"),"common/"+w);
+        pathname = path.resolve(path.join(config.dir.root, "widgets/web"),"common/"+widget);
     }
     var resource = findResource(pathname);
 
@@ -54,118 +56,103 @@ function getWidgetContent(w,g,callback){
     //处理html
     var htmlpath = resource.html;
 
-    fs.readFile(htmlpath, 'utf8', function(err, data){
-        $ = query.load(data);
-        if(config.isDebug){
-            $.root().append('<link rel="stylesheet" href="http://static.gagein.com/css/base.css" type="text/css">');
-            $.root().append('<link rel="stylesheet" href="http://static.gagein.com/css/web/member.css" type="text/css">');
-        }
-        $.root().append(csscode);
-        $.root().append(jscode);
-        callback($.html());
-    })
+    //console.log(jscode);
+
+    var data = fs.readFileSync(htmlpath, 'utf8');
+    $ = query.load(data);
+    if(config.isDebug){
+        $.root().append('<link rel="stylesheet" href="http://static.gagein.com/css/base.css" type="text/css">');
+        $.root().append('<link rel="stylesheet" href="http://static.gagein.com/css/web/member.css" type="text/css">');
+    }
+    $.root().append(csscode);
+    $.root().append(jscode);
+     //console.log($.html());
+    return $.html();
+
 }
 
-function getPageContent(pathname,callback){
+function getPageContent(req){
     var $,widgets;
-    async.waterfall([
-        function(callback){
-            //获取资源
-            var json = {};
-            json = findResource(pathname);
 
-            //var pathname = pathname + "\\"+ path.basename(pathname) + ".html";
-            fs.readFile(pathname + "\\"+ path.basename(pathname) + ".html", 'utf8', function(err, data) {
-                $ = query.load(data);
-                widgets = $("widget");
-                //没有元素直接返回
-                if(!widgets.length){
-                    return callback(null,json);
-                }
-                json.widgets = [];
-                //获取每个widget
-                _.each(widgets,function(ele){
-                    var widget_path = ele.children[0].data.replace(".","/");
-                    widget_path = path.resolve( path.join(config.dir.root, "widgets/web"), widget_path);
-                    json.widgets.push(findResource(widget_path));
-                })
-                logger.debug("get resources done!");
-                callback(null,json);
-            })
-        },
-        function(resource,callback){
-            //对资源分类
+    //获取资源
+    var json = {};
+    var page = req.params.page;
+    var pathname = path.join(config.dir.root, "pages/web/")+ page;
 
-            var getFileByType = function(type){
-                var arr = [];
-                arr.push();
-                _.each(_.union(resource,resource.widgets),function(widget){
-                    if("js" == type){
-                        arr.push("<script src=\"" + widget[type] + "\"></script>");
-                    }else if("css" == type){
-                        arr.push("<link rel=\"stylesheet\" href=\""+widget[type]+"\" type=\"text/css\">");
-                    }else{
-                        arr.push(widget[type]);
-                    }
-                })
-                return arr;
+    json = findResource(pathname);
+
+    //var pathname = pathname + "\\"+ path.basename(pathname) + ".html";
+    var data = fs.readFileSync(pathname + "\\"+ path.basename(pathname) + ".html", 'utf8');
+
+    $ = query.load(data);
+    widgets = $("widget");
+    //没有元素直接返回
+    if(!widgets.length){
+        return callback(null,json);
+    }
+    json.widgets = [];
+    //获取每个widget
+    _.each(widgets,function(ele){
+        var widget_path = ele.children[0].data.replace(".","/");
+        widget_path = path.resolve( path.join(config.dir.root, "widgets/web"), widget_path);
+        json.widgets.push(findResource(widget_path));
+    })
+    logger.debug("get resources done!");
+    var resource = json
+
+    //对资源分类
+
+    var getFileByType = function(type){
+        var arr = [];
+        arr.push();
+        _.each(_.union(resource,resource.widgets),function(widget){
+            if("js" == type){
+                arr.push("<script src=\"" + widget[type] + "\"></script>");
+            }else if("css" == type){
+                arr.push("<link rel=\"stylesheet\" href=\""+widget[type]+"\" type=\"text/css\">");
+            }else{
+                arr.push(widget[type]);
             }
+        })
+        return arr;
+    }
 
-            var css = getFileByType("css");
-            var js = getFileByType("js");
-            var html = getFileByType("html");
+    var css = getFileByType("css");
+    var js = getFileByType("js");
+    var html = getFileByType("html");
 
-            logger.debug("Resource classification done!");
-            callback(null,{
-                css : css,
-                js : js,
-                html : html
-            });
-        },
-        function(json,callback){
-            //处理js
-            var jscode = "\n" + json.js.join("\n");
-            //处理css
-            var csscode = "\n" + json.css.join("\n");
-            //处理html
-            var htmlpaths = json.html;
+    logger.debug("Resource classification done!");
+    json = {
+        css : css,
+        js : js,
+        html : html
+    };
 
-            var q = async.queue(function (task, callback) {
+    //处理js
+    var jscode = "\n" + json.js.join("\n");
+    //处理css
+    var csscode = "\n" + json.css.join("\n");
+    //处理html
+    var htmlpaths = json.html;
 
-                var w = $(task.widget);
-                var wtext = w.text().replace(".","\\");
+    _.each(widgets,function(widget,index){
+        var w = $(widget);
+        var wtext = w.text().replace(".","\\");
 
-                _.each(htmlpaths,function(hpath){
-                    if(~hpath.indexOf(wtext)){
-                        fs.readFile(hpath, 'utf8', function(err, data) {
-//                            var parent = w.parent();
-//                            parent.html(data);
-                            w.replaceWith(data)
-                            callback();
-                        })
-                    }
-                })
-            }, 2);
-
-            _.each(widgets,function(widget,index){
-                (function(idx){
-                    q.push({widget: widget}, function (err) {
-                        logger.debug('finished processing : ' + $(widget).text());
-                    })
-                })(index)
-
-            });
-
-            q.drain = function() {
-                $("link").last().after(csscode);
-                $("head script").last().after(jscode);
-                logger.debug("template processing done");
-                callback(null,$.html());
+        _.each(htmlpaths,function(hpath){
+            if(~hpath.indexOf(wtext)){
+                var data = fs.readFileSync(hpath, 'utf8')
+                w.replaceWith(data)
             }
-        }
-    ], function(err, html) {
-        callback(html);
+        })
     });
+
+    $("link").last().after(csscode);
+    $("head script").last().after(jscode);
+
+    logger.debug("template processing done");
+    return $.html();
+
 }
 
 module.exports = {

@@ -53,43 +53,26 @@ app.use(function (req, res, next) {
             return i18n.__.apply(req, arguments);
         };
     };
-
     next();
 });
 
-
-var _getController = function(req,res,cb){
-    if(fs.existsSync(config.dir.root + "/pages/web/" + req.params.page + "/" + req.params.page + "_controller.js")){
+var _getController = function(page){
+    if(fs.existsSync(config.dir.root + "/pages/web/" + page + "/" + page + "_controller.js")){
         //logger.debug("./web/" + req.params.page + "/home_controller");
-        var controller = require(__dirname + "/pages/web/" + req.params.page + "/" + req.params.page + "_controller");
-        cb(controller);
+        return require(__dirname + "/pages/web/" + page + "/" + page + "_controller");
     }
 };
 
 app.get('/:page', function(req, res){
-
-    var x = res.__('hello world');
-    logger.warn(x);
-
     if(req.params.page != "favicon.ico"){
-        _getController(req,res,function(controller){
-            controller.getPageContent(function(data){
-                logger.debug("page success!");
-                res.send(data);
-            })
-        });
+        var controller = _getController(req.params.page);
+        controller.getPageContent(req, res);
     }
 });
 
 app.get('/:page/widget/:widget', function(req, res){
-
-    _getController(req,res,function(controller){
-        //logger.debug("get" + req.params.widget[0].toUpperCase() + req.params.widget.substr(1).toLowerCase() + "Content" );
-        controller["get" + req.params.widget[0].toUpperCase() + req.params.widget.substr(1).toLowerCase() + "Content" ](req.params.widget,req.params.page,function(data){
-            logger.debug("widget success!");
-            res.send(data);
-        })
-    });
+    var controller = _getController(req.params.page);
+    controller["get" + req.params.widget[0].toUpperCase() + req.params.widget.substr(1).toLowerCase() + "Content" ](req,res);
 });
 
 logger.info('Server Started');

@@ -1,5 +1,5 @@
 ﻿require(['globle'],function (G) {
-    G.app.controller('filter',function DemoController($scope,$location,$rootScope) {
+    G.app.controller('filter',function($scope,$location,$rootScope) {
         var _getFilter = function(){
             var filter,defaultFilter = {
                 trigger : 0,
@@ -12,7 +12,6 @@
 
         var filter = _getFilter();
         $scope.filter = filter;
-
 
         $scope.$watch( "filter.trigger", function(val) {
             filter.trigger = val;
@@ -38,7 +37,6 @@
                 $scope["is_" + type + "_open"] = false;
             }
         }
-
 
         $rootScope.$on('$locationChangeSuccess', function(){
             filter = _getFilter();

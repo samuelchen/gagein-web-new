@@ -1,6 +1,6 @@
 <div class="filters mode" ng-controller="filter">
     <h2 class="nav">Filter</h2>
-    <div class="fiters-list filters-triggers " ng-class="{open : is_triggers_open}" >
+    <div class="fiters-list filters-triggers open" ng-class="{open : is_triggers_open}" >
         <h3 class="black-h2" ng-click="open($event,'triggers')">News Triggers</h3>
         <ul class="gray-cnt " ng-class="{fhide : !is_triggers_open}">
             <li><input type="radio" name="triggers" ng-model="filter.trigger" checked value="0"/>All</li>
@@ -23,17 +23,14 @@
     </div>
     <div class="fiters-list filters-relevance" ng-class="{open : is_relevance_open}">
         <h3 class="black-h2" ng-click="open($event,'relevance')">News Relevance</h3>
-        <ul class="gray-cnt" ng-class="{fhide : !is_relevance_open}">
+        <ul class="gray-cnt fhide" ng-class="{fhide : !is_relevance_open}">
             <li><input type="radio" name="relevance"  ng-model="filter.relevance" checked value="0"/>More Relevant</li>
             <li><input type="radio" name="relevance"  ng-model="filter.relevance" value="1"/>More News</li>
         </ul>
     </div>
-
     {{#config.isDebug}}
         <div>triggers : <span ng-bind="filter.trigger"></span></div>
         <div>search : <span ng-bind="filter.search"></span></div>
         <div>relevance : <span ng-bind="filter.relevance"></span></div>
     {{/config.isDebug}}
-
-
 </div>

@@ -2,67 +2,19 @@
     <h2 class="nav">News</h2>
     <div class="news-list">
         <ul>
-            <li class="news-list-first fclear">
-                <div class="news-list-l fl">
-                    <a href="#"><img src="{{{widget_path}}}/home/news/image/company.jpg" alt="#"/></a>
-                    <a href="#"><img src="{{{widget_path}}}/home/news/image/people.jpg" alt="#"/></a>
-                </div>
-                <div class="news-list-r fl">
-                    <a href="#"><h2 class="black-h1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.</h2></a>
-                    <p class="gray-cnt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic
-                        mollitia officiis quidem recusandae </p>
-                    <span class="gray-desc">48 min ago via LinkedIn</span>
-                </div>
-            </li>
-            <li class="fclear">
-                <div class="news-list-l fl">
-                    <a href="#"><img src="{{{widget_path}}}/home/news/image/company.jpg" alt="#"/></a>
-                    <a href="#"><img src="{{{widget_path}}}/home/news/image/people.jpg" alt="#"/></a>
-                </div>
-                <div class="news-list-r fl">
-                    <h2 class="black-h1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.</h2>
-                    <p class="gray-cnt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic
-                        mollitia officiis quidem recusandae </p>
-                    <span class="gray-desc">48 min ago via LinkedIn</span>
-                </div>
-            </li>
-            <li class="fclear">
-                <div class="news-list-l fl">
-                    <a href="#"><img src="{{{widget_path}}}/home/news/image/company.jpg" alt="#"/></a>
-                    <a href="#"><img src="{{{widget_path}}}/home/news/image/people.jpg" alt="#"/></a>
-                </div>
-                <div class="news-list-r fl">
-                    <h2 class="black-h1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.</h2>
-                    <p class="gray-cnt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic
-                        mollitia officiis quidem recusandae </p>
-                    <span class="gray-desc">48 min ago via LinkedIn</span>
-                </div>
-            </li>
-            <li class="fclear">
-                <div class="news-list-l fl">
-                    <a href="#"><img src="{{{widget_path}}}/home/news/image/company.jpg" alt="#"/></a>
-                    <a href="#"><img src="{{{widget_path}}}/home/news/image/people.jpg" alt="#"/></a>
-                </div>
-                <div class="news-list-r fl">
-                    <h2 class="black-h1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.</h2>
-                    <p class="gray-cnt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic
-                        mollitia officiis quidem recusandae </p>
-                    <span class="gray-desc">48 min ago via LinkedIn</span>
-                </div>
-            </li>
-            <li class="news-list-last fclear">
-                <div class="news-list-l fl">
-                    <a href="#"><img src="{{{widget_path}}}/home/news/image/company.jpg" alt="#"/></a>
-                    <a href="#"><img src="{{{widget_path}}}/home/news/image/people.jpg" alt="#"/></a>
-                </div>
-                <div class="news-list-r fl">
-                    <h2 class="black-h1">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.</h2>
-                    <p class="gray-cnt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic
-                        mollitia officiis quidem recusandae </p>
-                    <span class="gray-desc">48 min ago via LinkedIn</span>
-                </div>
-            </li>
-
+            {{#news.items}}
+                <li class="fclear">
+                    <div class="news-list-l fl">
+                        <a href="#"><img src="{{{widget_path}}}{{company_pic}}" alt="#"/></a>
+                        <a href="#"><img src="{{{widget_path}}}{{people_pic}}" alt="#"/></a>
+                    </div>
+                    <div class="news-list-r fl">
+                        <a href="#"><h2 class="black-h1">{{title}}</h2></a>
+                        <p class="gray-cnt">{{content}}</p>
+                        <span class="gray-desc">{{desc}}</span>
+                    </div>
+                </li>
+            {{/news.items}}
         </ul>
     </div> 
 </div>

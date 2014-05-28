@@ -1,3 +1,3 @@
-﻿require(['angular'],function (ng) {
-    console.log(ng);
-})
+﻿require(['globle'],function (G) {
+
+});
