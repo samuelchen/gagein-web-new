@@ -1,8 +1,11 @@
 ﻿.bookmarks{width:165px;}
 .bookmarks li{margin-bottom: 18px;}
-.bookmarks-content{height:140px;overflow: hidden;}
+.bookmarks-content{height:226px;overflow: hidden; word-break: break-all;}
 
 .bookmarks .bookmarks-more{color:#ff8031}
 
-.bookmarks .bookmarks-content.open{overflow: visible;}
+.bookmarks .bookmarks-content.open{height: auto}
 .bookmarks .bookmarks-more{diplay:inline}
+
+.bookmarks .bookmarks-content a{color:#ACACAC;float:left;margin-right: 10px;}
+.bookmarks .bookmarks-content p{float:left;width: 145px;}

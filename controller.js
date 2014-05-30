@@ -13,8 +13,8 @@ var mustache = require('mustache');
 
 var query = require('cheerio');
 
-var logger = require('./modules/logger')
-var config = require('./config')
+var logger = require('./modules/logger');
+var config = require('./config');
 
 //router 规则映射对应的文件处理
 
@@ -41,8 +41,9 @@ var findResource = function(pathname){
 }
 
 function getWidgetContent(req){
-    var widget = req.param.widget,
-        page = req.param.page;
+    var widget = req.params.widget,
+        page = req.params.page;
+
     var pathname = path.resolve(path.join(config.dir.root, "widgets/web"),page+"/"+widget);
 
     if(!fs.existsSync(pathname)){
@@ -50,7 +51,7 @@ function getWidgetContent(req){
     }
     var resource = findResource(pathname);
 
-    var jscode = "<script>" + resource.js + "</script>";
+    var jscode = "<script src=\"" + resource.js + "\"></script>";
     //处理css
     var csscode = "<link rel=\"stylesheet\" href=\""+resource.css+"\" type=\"text/css\">";
     //处理html
@@ -65,6 +66,10 @@ function getWidgetContent(req){
         $.root().append('<link rel="stylesheet" href="http://static.gagein.com/css/web/member.css" type="text/css">');
     }
     $.root().append(csscode);
+    if(config.isDebug){
+        $.root().append('<script src="http://static.gagein.com/js/require2.1.11.js"></script>');
+        $.root().append('<script src="http://static.gagein.com/js/base.js"></script>');
+    }
     $.root().append(jscode);
      //console.log($.html());
     return $.html();
@@ -155,7 +160,13 @@ function getPageContent(req){
 
 }
 
+
+function getTemplate(pathname){
+    return  fs.readFileSync(pathname, 'utf8');
+}
+
 module.exports = {
+    getTemplate : getTemplate,
     findResource : findResource,
     getPageContent : getPageContent,
     getWidgetContent : getWidgetContent,

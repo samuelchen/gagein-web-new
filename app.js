@@ -70,6 +70,11 @@ app.get('/:page', function(req, res){
     }
 });
 
+app.get('/:page/method/:method', function(req, res){
+    var controller = _getController(req.params.page);
+    controller[req.params.method](req,res);
+});
+
 app.get('/:page/widget/:widget', function(req, res){
     var controller = _getController(req.params.page);
     controller["get" + req.params.widget[0].toUpperCase() + req.params.widget.substr(1).toLowerCase() + "Content" ](req,res);

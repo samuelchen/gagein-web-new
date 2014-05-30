@@ -6,6 +6,7 @@
 
 .fiters-list ul{padding-top: 12px;padding-left: 12px;}
 .fiters-list ul li{margin-bottom: 5px;}
+.fiters-list .filters-search-suggest .selected{background-color: #F4F4F4}
 .filters-search-icon {background: #fff url(image/icon-search.jpg) no-repeat scroll 0 0px;width:10px;height:10px;margin-right: 5px;vertical-align: middle}
 .fiters-list input{margin-right: 5px;}
 .fiters-list input[type=radio]{position: relative;top:2px;}

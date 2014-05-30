@@ -1,38 +1,11 @@
-<div class="bookmarks mode">
+<div class="bookmarks mode" ng-controller="bookmarks">
     <h2 class="nav">Bookmarks</h2>
-    <div class="bookmarks-content gray-cnt">
+    <div class="bookmarks-content gray-cnt" ng-class="{open : bookmark_open}">
         <ul>
-            <li>
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Temporibus?</p>
-            </li>
-            <li>
-                <p>Enim hic laboriosam molestiae non optio placeat reiciendis tempora.</p>
-            </li>
-            <li>
-                <p>Deserunt earum inventore ipsa laudantium maiores qui sit totam.</p>
-            </li>
-            <li>
-                <p>Dolorem ea eligendi esse est facere nesciunt quaerat voluptate!</p>
-            </li>
-            <li>
-                <p>Eum expedita, in officiis quos recusandae sapiente sequi veniam?</p>
-            </li>
-            <li>
-                <p>Animi aperiam assumenda eius inventore laborum natus necessitatibus, quod.</p>
-            </li>
-            <li>
-                <p>Dolor doloremque harum molestias neque nobis numquam repellat! Rerum.</p>
-            </li>
-            <li>
-                <p>Adipisci animi consequatur cumque dignissimos dolorem doloribus qui quibusdam!</p>
-            </li>
-            <li>
-                <p>Corporis culpa debitis distinctio, et incidunt molestias quam vel.</p>
-            </li>
-            <li>
-                <p>Ad doloribus impedit iusto magnam quidem, suscipit tenetur voluptate.</p>
+            <li class="fclear" ng-repeat="item in bookmarks.items">
+                <a href="#" bmid="{%item.id%}" ng-click="removeBookmark($index)">x</a><p>{%item.title%}</p>
             </li>
         </ul>
     </div>
-    <a href="#" class="bookmarks-more">More...</a>
+    <a href="#" class="bookmarks-more" ng-show="bookmark-more">More...</a>
 </div>

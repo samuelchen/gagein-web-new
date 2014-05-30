@@ -5,11 +5,13 @@
 .news-list li:last-child .news-list-r{border-bottom: 0px;padding-bottom: 0px;}
 
 
-.news-list-r{width:350px;border-bottom: 2px solid #f5f5f5;padding-bottom: 25px;}
+.news-list-r{width:350px;border-bottom: 2px solid #f5f5f5;padding-bottom: 6px;}
 .news-list-r h2{font-size:14px;margin-bottom: 10px;}
 .news-list-r p{margin-bottom: 10px;word-break: break-all;}
 
 .news-list-l{width:22px;padding-top: 6px;margin-right:10px;}
 .news-list-l a{display: block;float:left;margin-right: 10px;margin-bottom: 10px;}
 
-
+.news-icon a{ color:#fe8a4f;display:inline-block}
+.news-icon-bookmark{background: #fff url(image/icon-bookmark.jpg) no-repeat scroll 0 -24px;padding-left: 16px}
+.news-icon-bookmark.selected{background-position:  0 4px;}
