@@ -12,14 +12,15 @@ var path = require('path');
 
 var api = require("./../../../modules/api");
 
-console.log(api);
-
-
 module.exports = {
     getPageContent : function(req,res){
+        var old_config = config.isDebug;
+        config.isDebug = false;
         var tpl = base.getPageContent(req);
-        var data  =
-        res.send(base.render(tpl,data));
+        var data  = api.getPageContent();
+        var html = base.render(tpl,data);
+        config.isDebug = old_config;
+        res.send(html);
     },
     //命名规则 ， get +　widgetname(首字母大写)　＋　Content
     getBookmarksContent : function(req,res ){
@@ -33,7 +34,7 @@ module.exports = {
         res.send(base.render(tpl,data));
     },
     getFiltersContent : function(req,res ){
-        var tpl = base.getFiltersContent(req);
+        var tpl = base.getWidgetContent(req);
         var data = api.getBookmarksContent();
         res.send(base.render(tpl,data));
     },
@@ -53,7 +54,7 @@ module.exports = {
         var pathname = path.join(config.dir.root, "widgets/web/home/filters/search-list.tpl");
         var tpl = base.getTemplate(pathname);
 
-        var data = api.getSearchList(key);
+        var data = api.getSearchList(req.query.key);
         res.send(base.render(tpl,data));
     },
     getBookmarkList : function(req,res){
