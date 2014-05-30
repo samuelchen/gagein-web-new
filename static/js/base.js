@@ -1,5 +1,6 @@
+var REQUIREJS_BASE_URL;
 require.config({
-    baseUrl: 'http://static.gagein.com/js/',
+    baseUrl: REQUIREJS_BASE_URL,
 
     paths: {
         angular : "common/core/angular1.2.16",

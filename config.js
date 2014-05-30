@@ -30,6 +30,7 @@ exports.log = {
 exports.host = {
     name: 'localhost',
     static: 'localhost/static',
+    baseurl: '\"http://static.gagein.com/js/\"',
     protocol: 'http',
     api: 'http://www.gagein.com/svc'
 }
