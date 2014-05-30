@@ -60,18 +60,20 @@ function getWidgetContent(req){
     //console.log(jscode);
 
     var data = fs.readFileSync(htmlpath, 'utf8');
-    $ = query.load(data);
+    $ = query.load('<div ng-app="app">'+data+'</div>');
     if(config.isDebug){
         $.root().append('<link rel="stylesheet" href="http://static.gagein.com/css/base.css" type="text/css">');
         $.root().append('<link rel="stylesheet" href="http://static.gagein.com/css/web/member.css" type="text/css">');
     }
     $.root().append(csscode);
     if(config.isDebug){
+        $.root().append('{{{baseurl}}}');
         $.root().append('<script src="http://static.gagein.com/js/require2.1.11.js"></script>');
         $.root().append('<script src="http://static.gagein.com/js/base.js"></script>');
     }
     $.root().append(jscode);
      //console.log($.html());
+    $.root().attr("ng-app","app")
     return $.html();
 
 }

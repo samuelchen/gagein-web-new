@@ -23,6 +23,7 @@
         $scope.more = function(ele){
             $scope.bookmark_more = false;
             $scope.bookmark_open = true;
+            $scope.bookmark_more_hasclick = true;
         }
 
         $scope.removeBookmark = function(index){
@@ -51,7 +52,7 @@
                 p.success(function(data){
                     if(!_.isEmpty(data)){
                         $scope.bookmarks.items.unshift(data);
-                        if($scope.bookmarks.items.length > 3 && ($scope.bookmarks.items.length- 1 == 3)){
+                        if($scope.bookmarks.items.length > 3 && !$scope.bookmark_more_hasclick){
                             $scope.bookmark_more = true;
                         }
                         cb();

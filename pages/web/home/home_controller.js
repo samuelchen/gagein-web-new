@@ -129,9 +129,11 @@ module.exports = {
         var data = _.filter(filtersInfo.search.items, function(item){
             return ~item.key.indexOf(req.query.key);
         });
-        data = {search :{
-            items : data
-        }};
+        data = {
+            search :{
+                items : data
+            }
+        };
 
         //console.log(base.render(tpl,data));
         res.send(base.render(tpl,data));

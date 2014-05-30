@@ -98,7 +98,7 @@
             if(key){
                 var p = $http({
                     method: 'GET',
-                    url: 'home/method/getSearchList',
+                    url: '/home/method/getSearchList',
                     params : {key : key},
                     cache : true
                 });

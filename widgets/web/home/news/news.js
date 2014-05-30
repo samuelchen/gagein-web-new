@@ -1,5 +1,6 @@
 ﻿require(['ngapp','util'],function (app,u) {
     app.controller('news',function($scope,$rootScope,$location,$http) {
+
         $rootScope.$on('$locationChangeSuccess', function(){
             var filters = $location.search();
             var p = $http({
