@@ -113,7 +113,13 @@ module.exports = {
     getNewsList : function(req,res){
         var pathname = path.join(config.dir.root, "widgets/web/home/news/new-list.tpl");
         var tpl = base.getTemplate(pathname);
-        var data = newsInfo;
+        var data = {};
+        data.news = {};
+        data.news.items = [];
+
+        for(var i=0 ,len = Math.round(Math.random() * 4)+1; i<len ;i++){
+            data.news.items.push(newsInfo.news.items[i]);
+        }
         res.send(base.render(tpl,data));
     },
     getSearchList : function(req,res){
@@ -136,8 +142,6 @@ module.exports = {
     },
     addBookmark : function(req,res){
 
-        _.find([1, 2, 3, 4, 5, 6], function(num){ return num % 2 == 0; });
-
         var data = _.find(bookmarksInfo.bookmarks.items, function(item){
             return item.id == req.query.id;
         });
@@ -145,7 +149,9 @@ module.exports = {
             data = _.filter(newsInfo.news.items, function(item){
                 return item.id == req.query.id;
             })[0];
-            res.send({id : data.id , title : data.title});
+            data = {id : data.id , title : data.title};
+            bookmarksInfo.bookmarks.items.unshift(data);
+            res.send(data);
         }else{
             res.send({});
         }

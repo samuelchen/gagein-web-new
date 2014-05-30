@@ -7,7 +7,7 @@
 var path = require('path');
 var i18n = require('i18n');
 
-exports.isDebug = true;
+exports.isDebug = false;
 
 // physical path
 exports.dir = {

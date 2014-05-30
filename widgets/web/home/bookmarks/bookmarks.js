@@ -16,8 +16,6 @@
             var time = setInterval(function(){
                 if(ul.html()){
                     $scope.$root.$emit('updatenewbookmark', data.bookmarks.items);
-                    clearInterval(time);
-                    time = null;
                 }
             },0)
         });
@@ -36,7 +34,8 @@
                 cache : true
             });
             p.success(function(data){
-                $scope.bookmarks.items.splice(index,1);
+                var item = $scope.bookmarks.items.splice(index,1);
+                $scope.$root.$emit('removebookmark',item[0].id)
             });
         };
 
