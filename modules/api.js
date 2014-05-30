@@ -4,22 +4,26 @@
  * the GageIn API wrapper
  */
 
+var config = require('../config');
+var logger = require('./logger');
+var _ = require('underscore');
 
-modules.exports.auth = function (user, password) {
-    return true;
+// the api mappings
+var api_mapping = {
+    login: '/login',
+    register: '/register',
+    followedCompanies: '/list/companies_detail'
 }
 
-modules.exports.getBookmark = function (args) {
+logger.debug('---------- api ----------');
+_.each(api_mapping, function(entry){
+    // "this" means "module.exports" (3rd argument)
 
-}
-
-modules.exports.addBookmark = function (args) {
-
-}
-
-modules.exports.removeBookmark = function(args) {
-
-}
+    logger.debug(entry.name);
+    logger.debug(entry.value);
+    logger.debug(this);
+}, module.exports);
+logger.debug('---------- api end ----------');
 
 
 

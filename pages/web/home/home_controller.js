@@ -9,6 +9,7 @@ var base = require("./../../../controller");
 var _ = require("underscore");
 var config = require('./../../../config');
 var path = require('path');
+var api = require('../../../modules/api')
 
 var newsInfo = {
     news : {
