@@ -10,7 +10,6 @@
             });
             p.success(function(data){
                 $scope.newslist = data;
-
             });
         });
 
@@ -35,7 +34,7 @@
         $scope.$root.$on('updatenewbookmark',function(event,data){
             u.$("[bid]").removeClass("selected");
             _.each(data,function(d){
-                u.$("[bid="+d.id+"]").addClass("selected");
+                u.$("[bid="+ d.id+"]").addClass("selected");
             })
         });
     });

@@ -12,7 +12,14 @@
             }else{
                 $scope.bookmark_more = false;
             }
-            $scope.$root.$emit('updatenewbookmark', data.bookmarks.items);
+            var ul = u.$(".news-list ul");
+            var time = setInterval(function(){
+                if(ul.html()){
+                    $scope.$root.$emit('updatenewbookmark', data.bookmarks.items);
+                    clearInterval(time);
+                    time = null;
+                }
+            },0)
         });
 
         $scope.more = function(ele){

@@ -174,11 +174,13 @@ module.exports = {
         var widget_common_path = "/widgets/web/common";
         var widget_path =  "/widgets/web";
         var page_path = "/page/web";
+        var baseurl = '<script>var REQUIREJS_BASE_URL = "'+config.host.protocol + '://'+ config.host.static+'/js/";</script>';
 
         data = _.extend({
             widget_common_path : widget_common_path,
             widget_path : widget_path,
             page_path : page_path,
+            baseurl : baseurl,
             config : config
         }, data);
 
