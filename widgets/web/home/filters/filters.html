@@ -17,8 +17,10 @@
             <li><input type="radio" name="triggers" ng-model="filter.trigger" value="11" />Personnel Changes</li>
             <li><input type="radio" name="triggers" ng-model="filter.trigger" value="12" />Real Estate</li>
             <li>
-                <span class="filters-search-icon finline"></span><input type="text" placeholder="text" class="gray-cnt" ng-change="searchChange()" ng-keypress="searchKeyPress($event)" ng-blur="searchBlur()" ng-model="filter.search"/>
-                <ol class="filters-search-suggest" ng-bind-html="searchlist | to_trusted" ng-mouseover="searchListIn($event.target)" ng-mouseover="searchListOut($event.target)" ng-click="searchListClick($event.target)">
+                <span class="filters-search-icon finline"></span>
+                <input type="text" placeholder="text" class="gray-cnt" ng-change="searchChange()" ng-keypress="searchKeyPress($event)" ng-blur="searchBlur()" ng-model="filter.search"/>
+                <ol class="filters-search-suggest" ng-bind-html="searchlist | to_trusted"
+                    ng-mouseover="searchListIn($event.target)" ng-mouseover="searchListOut($event.target)" ng-click="searchListClick($event.target)">
                 </ol>
             </li>
         </ul>

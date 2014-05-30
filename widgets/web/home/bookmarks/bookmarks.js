@@ -12,6 +12,8 @@
             }else{
                 $scope.bookmark_more = false;
             }
+
+
             var ul = u.$(".news-list ul");
             var time = setInterval(function(){
                 if(ul.html()){
