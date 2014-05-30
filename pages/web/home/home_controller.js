@@ -12,13 +12,19 @@ var path = require('path');
 var logger = require('../../../modules/logger');
 var api = require('../../../modules/api')
 
-
-
 module.exports = {
     getPageContent : function(req,res){
+        //屏蔽debug
+        var old_config = config.isDebug;
+        config.isDebug = false;
+
         var tpl = base.getPageContent(req);
-        var data  =
-        res.send(base.render(tpl,data));
+        var data  = api.getPageContent();
+        var html = base.render(tpl,data);
+        //还原debug
+        config.isDebug = old_config;
+
+        res.send(html);
     },
     //命名规则 ， get +　widgetname(首字母大写)　＋　Content
     getBookmarksContent : function(req,res ){
@@ -32,7 +38,7 @@ module.exports = {
         res.send(base.render(tpl,data));
     },
     getFiltersContent : function(req,res ){
-        var tpl = base.getFiltersContent(req);
+        var tpl = base.getWidgetContent(req);
         var data = api.getBookmarksContent();
         res.send(base.render(tpl,data));
     },
@@ -42,18 +48,19 @@ module.exports = {
         res.send(base.render(tpl,data));
     },
     getNewsList : function(req,res){
-        var pathname = path.join(config.dir.root, "widgets/web/home/news/new-list.tpl");
-        var tpl = base.getTemplate(pathname);
+        //var pathname = path.join(config.dir.root, "widgets/web/home/news/new-list.tpl");
+        //var tpl = base.getTemplate(pathname);
 
         var data = api.getNewsList(req.query.key);
-        res.send(base.render(tpl,data));
+        //res.send(base.render(tpl,data));
+        res.send(data);
     },
     getSearchList : function(req,res){
 
         var pathname = path.join(config.dir.root, "widgets/web/home/filters/search-list.tpl");
         var tpl = base.getTemplate(pathname);
 
-        var data = api.getSearchList(key);
+        var data = api.getSearchList(req.query.key);
         res.send(base.render(tpl,data));
     },
     getBookmarkList : function(req,res){
@@ -61,7 +68,7 @@ module.exports = {
         res.send(data);
     },
     addBookmark : function(req,res){
-        var data = api.getBookmark(req.query.id)
+        var data = api.addBookmark(req.query.id)
         res.send(data);
     },
     removeBookmark : function(req,res){

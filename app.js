@@ -1,19 +1,19 @@
 /**
      请求页面
-     http://localhost:3000/home
+     http://localhost/home
 
      请求
-     http://localhost:3000/home/widget/chunkname
+     http://localhost/home/widget/chunkname
 
      test
-     http://localhost:3000/home                         success
-     http://localhost:3000/home/widget/bookmarks        success
-     http://localhost:3000/home/widget/header           success
+     http://localhost/home                         success
+     http://localhost/home/widget/bookmarks        success
+     http://localhost/home/widget/header           success
 
      host
      127.0.0.1 static.gagein.com
 
-     https://static.gagein.com:3000/js/base.js          success
+     https://static.gagein.com/js/base.js          success
  */
 
 //require webserver , middleware
@@ -34,8 +34,12 @@ app.use(function(req, res, next){
     logger.info('Received ' + req.method + ' request ' + req.originalUrl + ' from ' + req.ip);
     next();
 });
+
+//请求pages 或者 widgets里面静态文件
 app.use(express.static(config.dir.root + "/"));
+//请求static里面静态文件
 app.use(express.static(config.dir.root + "/static"));
+
 //app.use(express.cookieParser());
 
 // init i18n module for this loop

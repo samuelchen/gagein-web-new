@@ -1,7 +1,24 @@
 <div class="news mode" ng-controller="news">
     <h2 class="nav">News</h2>
     <div class="news-list" >
-        <ul ng-bind-html="newslist | to_trusted" delegate="bookmark">
+        <ul delegate="bookmark">
+            <li class="fclear" ng-repeat="item in news.items">
+                <div class="news-list-l fl">
+                    <a href="#"><img ng-src="{{{widget_path}}}{%item.company_pic%}" alt="#"/></a>
+                    <a href="#"><img ng-src="{{{widget_path}}}{%item.people_pic%}" alt="#"/></a>
+                </div>
+                <div class="news-list-r fl">
+                    <a href="#"><h2 class="black-h1">{%item.title%}</h2></a>
+                    <p class="gray-cnt">{%item.content%}</p>
+                    <span class="gray-desc">{%item.desc%}</span>
+                    <div class="news-icon">
+                        <a href="#" class="news-icon-bookmark" ng-click="bookmark($index)" ng-class="{selected : item.isSelected}">Bookmark</a>
+                    </div>
+                </div>
+            </li>
         </ul>
-    </div> 
+    </div>
+    {{#config.isDebug}}
+    <div>news : <span>{%news.items%}</span></div>
+    {{/config.isDebug}}
 </div>

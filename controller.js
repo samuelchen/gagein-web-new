@@ -5,19 +5,15 @@ var path = require('path');
 //require utils function
 var _ = require("underscore");
 
-//require async , Processing an asynchronous file operations
-var async = require('async');
-
 //set engine
 var mustache = require('mustache');
-
 var query = require('cheerio');
 
 var logger = require('./modules/logger');
 var config = require('./config');
 
-//router 规则映射对应的文件处理
 
+//找到路径下对应js,css,html文件
 var findResource = function(pathname){
     logger.debug('findResource: ' + pathname);
     //查找资源文件
@@ -40,6 +36,7 @@ var findResource = function(pathname){
     return json;
 }
 
+//获取widget模板
 function getWidgetContent(req){
     var widget = req.params.widget,
         page = req.params.page;
@@ -49,98 +46,93 @@ function getWidgetContent(req){
     if(!fs.existsSync(pathname)){
         pathname = path.resolve(path.join(config.dir.root, "widgets/web"),"common/"+widget);
     }
-    var resource = findResource(pathname);
+    var json = findResource(pathname);
 
-    var jscode = "<script src=\"" + resource.js + "\"></script>";
+    //处理脚本
+    var jscode = "<script src=\"" + json.js + "\"></script>";
     //处理css
-    var csscode = "<link rel=\"stylesheet\" href=\""+resource.css+"\" type=\"text/css\">";
+    var csscode = "<link rel=\"stylesheet\" href=\""+json.css+"\" type=\"text/css\">";
     //处理html
-    var htmlpath = resource.html;
+    var htmlpath = json.html;
 
-    //console.log(jscode);
-
+    //获取模板数据
     var data = fs.readFileSync(htmlpath, 'utf8');
-    $ = query.load('<div ng-app="app">'+data+'</div>');
-    if(config.isDebug){
-        $.root().append('<link rel="stylesheet" href="http://static.gagein.com/css/base.css" type="text/css">');
-        $.root().append('<link rel="stylesheet" href="http://static.gagein.com/css/web/member.css" type="text/css">');
-    }
-    $.root().append(csscode);
-    if(config.isDebug){
-        $.root().append('{{{baseurl}}}');
-        $.root().append('<script src="http://static.gagein.com/js/require2.1.11.js"></script>');
-        $.root().append('<script src="http://static.gagein.com/js/base.js"></script>');
-    }
-    $.root().append(jscode);
-     //console.log($.html());
-    $.root().attr("ng-app","app")
-    return $.html();
+    $ = query.load('<div ng-app="app">\n'+data+'\n</div>');
 
+    var static_path = config.host.protocol + '://'+ config.host.static;
+
+    $.root().append('\n<link rel="stylesheet" href="'+static_path+'/css/base.css" type="text/css">');
+    $.root().append('\n<link rel="stylesheet" href="'+static_path+'/css/web/member.css" type="text/css">');
+    $.root().append("\n" + csscode );
+
+    $.root().append('\n{{{baseurl}}}');
+    $.root().append('\n<script src="'+static_path+'/js/require2.1.11.js"></script>');
+    $.root().append('\n<script src="'+static_path+'/js/base.js"></script>');
+    $.root().append("\n"+jscode);
+
+    return $.html();
 }
 
+
+//获取page模板
 function getPageContent(req){
     var $,widgets;
 
     //获取资源
-    var json = {};
+    var jsarrjson = {};
     var page = req.params.page;
     var pathname = path.join(config.dir.root, "pages/web/")+ page;
 
+    //获取page资源
     json = findResource(pathname);
 
-    //var pathname = pathname + "\\"+ path.basename(pathname) + ".html";
     var data = fs.readFileSync(pathname + "\\"+ path.basename(pathname) + ".html", 'utf8');
-
     $ = query.load(data);
+
     widgets = $("widget");
     //没有元素直接返回
     if(!widgets.length){
-        return callback(null,json);
+        return data;
     }
+
+    //widget的资源
     json.widgets = [];
     //获取每个widget
     _.each(widgets,function(ele){
-        var widget_path = ele.children[0].data.replace(".","/");
+        var widget_path = $(ele).text().replace(".","/");
         widget_path = path.resolve( path.join(config.dir.root, "widgets/web"), widget_path);
         json.widgets.push(findResource(widget_path));
     })
     logger.debug("get resources done!");
-    var resource = json
+
 
     //对资源分类
-
     var getFileByType = function(type){
         var arr = [];
-        arr.push();
-        _.each(_.union(resource,resource.widgets),function(widget){
+        _.each(_.union(json,json.widgets),function(r){
             if("js" == type){
-                arr.push("<script src=\"" + widget[type] + "\"></script>");
+                arr.push("<script src=\"" + r[type] + "\"></script>");
             }else if("css" == type){
-                arr.push("<link rel=\"stylesheet\" href=\""+widget[type]+"\" type=\"text/css\">");
+                arr.push("<link rel=\"stylesheet\" href=\""+r[type]+"\" type=\"text/css\">");
             }else{
-                arr.push(widget[type]);
+                arr.push(r[type]);
             }
         })
         return arr;
     }
 
-    var css = getFileByType("css");
-    var js = getFileByType("js");
-    var html = getFileByType("html");
+    var cssarr = getFileByType("css");
+    var jsarr = getFileByType("js");
+    var htmlarr = getFileByType("html");
 
     logger.debug("Resource classification done!");
-    json = {
-        css : css,
-        js : js,
-        html : html
-    };
 
     //处理js
-    var jscode = "\n" + json.js.join("\n");
+    var jscode = "\n" + jsarr.join("\n");
     //处理css
-    var csscode = "\n" + json.css.join("\n");
+    var csscode = "\n" + cssarr.join("\n");
     //处理html
-    var htmlpaths = json.html;
+    var htmlpaths = htmlarr;
 
     _.each(widgets,function(widget,index){
         var w = $(widget);
@@ -148,18 +140,31 @@ function getPageContent(req){
 
         _.each(htmlpaths,function(hpath){
             if(~hpath.indexOf(wtext)){
-                var data = fs.readFileSync(hpath, 'utf8')
+                var data = fs.readFileSync(hpath, 'utf8');
+                var data = [
+                    "\n<!--start: "+wtext+"-->\n",
+                    data,
+                    "\n<!--end: "+wtext+"-->\n"
+                ].join("");
                 w.replaceWith(data)
             }
         })
     });
 
-    $("link").last().after(csscode);
-    $("head script").last().after(jscode);
+    if($("head link").length){
+        $("head link").last().after(csscode);
+    }else{
+        $("head").append(csscode);
+    }
+
+    if($("head script").length){
+        $("head script").last().after(jscode);
+    }else{
+        $("head").append(jscode);
+    }
 
     logger.debug("template processing done");
     return $.html();
-
 }
 
 
