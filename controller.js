@@ -57,18 +57,24 @@ function getWidgetContent(req){
 
     //获取模板数据
     var data = fs.readFileSync(htmlpath, 'utf8');
-    $ = query.load('<div ng-app="app">\n'+data+'\n</div>');
+
+    var arr = [];
+    arr.push('\n<link rel="stylesheet" href="'+static_path+'/css/base.css" type="text/css">');
+    arr.push('\n<link rel="stylesheet" href="'+static_path+'/css/web/member.css" type="text/css">');
+    arr.push("\n" + csscode );
+
+    arr.push('\n{{{baseurl}}}');
+    arr.push('\n<script src="'+static_path+'/js/require2.1.11.js"></script>');
+    arr.push('\n<script src="'+static_path+'/js/base.js"></script>');
+    arr.push("\n"+jscode);
+
+    arr.push('<div ng-app="app">\n'+data+'\n</div>');
+
+    $ = query.load(arr.jo);
 
     var static_path = config.host.protocol + '://'+ config.host.static;
 
-    $.root().append('\n<link rel="stylesheet" href="'+static_path+'/css/base.css" type="text/css">');
-    $.root().append('\n<link rel="stylesheet" href="'+static_path+'/css/web/member.css" type="text/css">');
-    $.root().append("\n" + csscode );
 
-    $.root().append('\n{{{baseurl}}}');
-    $.root().append('\n<script src="'+static_path+'/js/require2.1.11.js"></script>');
-    $.root().append('\n<script src="'+static_path+'/js/base.js"></script>');
-    $.root().append("\n"+jscode);
 
     return $.html();
 }

@@ -19,8 +19,8 @@
             <li>
                 <span class="filters-search-icon finline"></span>
                 <input type="text" placeholder="text" class="gray-cnt" ng-change="searchChange()" ng-keypress="searchKeyPress($event)" ng-blur="searchBlur()" ng-model="filter.search"/>
-                <ol class="filters-search-suggest" ng-bind-html="searchlist | to_trusted"
-                    ng-mouseover="searchListIn($event.target)" ng-mouseover="searchListOut($event.target)" ng-click="searchListClick($event.target)">
+                <ol class="filters-search-suggest">
+                    <li ng-repeat="item in search.items" ng-click="searchListClick($index)" ng-class="{selected : $index == searchIndex}" ng-mouseout="searchListOut($index)" ng-mouseover="searchListIn($index)">{%item.key%}</li>
                 </ol>
             </li>
         </ul>
@@ -36,5 +36,6 @@
         <div>triggers : <span ng-bind="filter.trigger"></span></div>
         <div>search : <span ng-bind="filter.search"></span></div>
         <div>relevance : <span ng-bind="filter.relevance"></span></div>
+        <div>search.items : <span>{%search.items%}</span></div>
     {{/config.isDebug}}
 </div>

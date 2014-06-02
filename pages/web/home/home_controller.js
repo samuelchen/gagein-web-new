@@ -10,7 +10,7 @@ var _ = require("underscore");
 var config = require('./../../../config');
 var path = require('path');
 var logger = require('../../../modules/logger');
-var api = require('../../../modules/api')
+var api = require('../../../modules/api');
 
 module.exports = {
     getPageContent : function(req,res){
@@ -57,11 +57,12 @@ module.exports = {
     },
     getSearchList : function(req,res){
 
-        var pathname = path.join(config.dir.root, "widgets/web/home/filters/search-list.tpl");
-        var tpl = base.getTemplate(pathname);
+//        var pathname = path.join(config.dir.root, "widgets/web/home/filters/search-list.tpl");
+//        var tpl = base.getTemplate(pathname);
 
         var data = api.getSearchList(req.query.key);
-        res.send(base.render(tpl,data));
+//        res.send(base.render(tpl,data));
+        res.send(data);
     },
     getBookmarkList : function(req,res){
         var data = api.getBookmarkList();

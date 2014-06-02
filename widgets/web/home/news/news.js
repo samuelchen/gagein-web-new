@@ -1,22 +1,19 @@
 ﻿require(['ngapp','util'],function (app,u) {
-    app.controller('news',function($scope,$rootScope,$location,$http) {
+    app.controller('news',function($scope,$rootScope,$location,getJSON,shareObject) {
 
         $rootScope.$on('$locationChangeSuccess', function(){
             var filters = $location.search();
-            var p = $http({
-                method: 'GET',
-                url: '/home/method/getNewsList',
-                params : filters,
-                cache : true
-            });
-            p.success(function(data){
+            $scope.news = "";
+            getJSON('getNewsList',filters,function(data){
                 $scope.news = data.news;
-            });
+                shareObject.news = data.news;
+                shareObject.bookmarks && $scope.$root.$emit('updatenewbookmark', shareObject.bookmarks.items);
+            })
         });
 
         $scope.bookmark = function(index){
             var item = $scope.news.items[index];
-            if(!item.isSeleted){
+            if(!item.isSelected){
                 $scope.$root.$emit('addbookmark', item.id,function(){
                     $scope.news.items[index].isSelected = true;
                 });
@@ -35,13 +32,16 @@
         });
 
         $scope.$root.$on('updatenewbookmark',function(event,data){
+            if(!$scope.news){
+                return ;
+            }
             var ids = [];
             u._.each(data,function(d){
                 ids.push(d.id);
             });
 
             u._.each($scope.news.items,function(item){
-                item.isSelected = ~ids.indexOf(item.id) ? true : false;
+                item.isSelected = ~u._.indexOf(ids,item.id) ? true : false;
             });
         });
     });

@@ -1,11 +1,15 @@
 <div class="bookmarks mode" ng-controller="bookmarks">
-    <h2 class="nav">Bookmarks</h2>
-    <div class="bookmarks-content gray-cnt" ng-class="{open : bookmark_open}">
-        <ul>
-            <li class="fclear" ng-repeat="item in bookmarks.items">
-                <a href="#" bmid="{%item.id%}" ng-click="removeBookmark($index)">x</a><p>{%item.title%}</p>
-            </li>
-        </ul>
-    </div>
-    <a ng-href="#" class="bookmarks-more" ng-show="bookmark_more" ng-click="more($event.target)">More...</a>
+<h2 class="nav">Bookmarks</h2>
+<div class="bookmarks-content gray-cnt" ng-class="{open : bookmark_open}">
+    <ul>
+        <li class="fclear" ng-repeat="item in bookmarks.items">
+            <a href="javascript:" bmid="{%item.id%}" ng-click="removeBookmark($index)">x</a><p>{%item.title%}</p>
+        </li>
+    </ul>
 </div>
+<a href="javascript:" class="bookmarks-more" ng-show="bookmark_more" ng-click="more($event.target)">More...</a>
+    {{#config.isDebug}}
+    <div>bookmarks.items : <span >{%bookmarks.items%}</span></div>
+    {{/config.isDebug}}
+</div>
+

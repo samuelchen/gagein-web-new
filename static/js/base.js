@@ -5,6 +5,7 @@ require.config({
     paths: {
         angular : "common/core/angular1.2.16",
         "angular-route" : "common/core/angular-route",
+        "angular-resource" : "common/core/angular-resource",
         underscore : "common/core/underscore",
         "underscore.string" : "common/core/underscore.string",
         ngapp : "common/core/ngapp",
@@ -17,7 +18,11 @@ require.config({
         },
         "angular-route":{
             deps: ['angular']
+        },
+        'angular-resource': {
+            deps:['angular']
         }
     }
 });
+
 
