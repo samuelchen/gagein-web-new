@@ -7,7 +7,7 @@
             getJSON('getNewsList',filters,function(data){
                 $scope.news = data.news;
                 shareObject.news = data.news;
-                shareObject.bookmarks && $scope.$root.$emit('updatenewbookmark', shareObject.bookmarks.items);
+                $scope.$root.$emit('updatenewbookmark');
             })
         });
 
@@ -31,13 +31,13 @@
             item.isSelected = false;
         });
 
-        $scope.$root.$on('updatenewbookmark',function(event,data){
-            if(!$scope.news){
+        $scope.$root.$on('updatenewbookmark',function(event){
+            if(!shareObject.bookmarks || !shareObject.news  ){
                 return ;
             }
             var ids = [];
-            u._.each(data,function(d){
-                ids.push(d.id);
+            u._.each(shareObject.bookmarks.items,function(item){
+                ids.push(item.id);
             });
 
             u._.each($scope.news.items,function(item){

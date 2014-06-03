@@ -10,7 +10,7 @@
             }
 
             shareObject.bookmarks = data.bookmarks;
-            shareObject.news && $scope.$root.$emit('updatenewbookmark', data.bookmarks.items);
+            $scope.$root.$emit('updatenewbookmark');
         })
 
         $scope.more = function(ele){
