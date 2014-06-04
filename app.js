@@ -28,7 +28,7 @@ var config = require("./config");
 var app = express();
 
 
-//app.engine('html', cons.mustache);
+app.engine('html', cons.mustache);
 
 // middleware to log all requests
 app.use(function(req, res, next){

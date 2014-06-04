@@ -34,8 +34,13 @@ var api_mapping = {
         path: '/list/companies_detail',
         method: function(parms, callback) {
         }
-    }
+    },
+    followComany: { path: '/svc/member/me/company/follow'}
 }
+
+//api.followComany({}, function(data){
+//
+//})
 /*
  * Mapping end
  **********************************************************/
@@ -223,7 +228,7 @@ exports.getNewsList = function () {
     data.news = {};
     data.news.items = [];
 
-    for(var i=0 ,len = Math.round(Math.random() * 4)+1; i<len ;i++){
+    for(var i=0 ,len = Math.round(Math.random() * 2)+1; i<len ;i++){
         data.news.items.push(newsInfo.news.items[i]);
     }
     return data;
