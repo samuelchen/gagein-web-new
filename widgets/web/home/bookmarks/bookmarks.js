@@ -52,7 +52,7 @@
                 if($scope.bookmarks.items.length <= 3){
                     $scope.bookmark_more = false;
                 }
-                cb();
+                cb && cb();
             })
         });
     });

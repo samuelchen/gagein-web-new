@@ -58,6 +58,8 @@ function getWidgetContent(req){
     //获取模板数据
     var data = fs.readFileSync(htmlpath, 'utf8');
 
+    var static_path = config.host.protocol + '://'+ config.host.static;
+
     var arr = [];
     arr.push('\n<link rel="stylesheet" href="'+static_path+'/css/base.css" type="text/css">');
     arr.push('\n<link rel="stylesheet" href="'+static_path+'/css/web/member.css" type="text/css">');
@@ -70,9 +72,7 @@ function getWidgetContent(req){
 
     arr.push('<div ng-app="app">\n'+data+'\n</div>');
 
-    $ = query.load(arr.jo);
-
-    var static_path = config.host.protocol + '://'+ config.host.static;
+    $ = query.load(arr.join(""));
 
 
 
