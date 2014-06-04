@@ -35,7 +35,8 @@ module.exports = {
     getNewsContent : function(req,res ){
         var tpl = base.getWidgetContent(req);
         var data = api.getNewsContent();
-        res.send(base.render(tpl,data));
+        //var data = {news:{items:[]}};
+        res.send(base.render(tpl,{"news_init":JSON.stringify(data.news).replace(/"/g,"'")}));
     },
     getFiltersContent : function(req,res ){
         var tpl = base.getWidgetContent(req);
@@ -76,6 +77,29 @@ module.exports = {
         var data = api.removeBookmark(req.query.id);
         res.send(data);
     }
+
+//    function login(last_url) {
+//      var name = form('txtName');
+//      var pwd = form('txtPwd');
+//    api.login({email:name, password:pwd}, function(data){
+//        token =data.body.access_token;
+//        res.cookie['token'] = token;
+//        redirect(last_url);
+//    });
+//
+//    function getNews(){
+//        token = req.cookie['token'];
+//        if (!token) {
+//            redirect ('/login');
+//        }
+//        api.token = token
+//        try
+//        ret = api.xxx();
+//        catch
+//        if (res.returncode == 'fail')
+//        {10021 logain fail}
+//    }
+
 
 }
 
