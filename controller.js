@@ -59,7 +59,7 @@ function getWidgetContent(req){
     var data = fs.readFileSync(htmlpath, 'utf8');
     $ = query.load('<div ng-app="app">\n'+data+'\n</div>');
 
-    var static_path = config.host.protocol + '://'+ config.host.static;
+    var static_path = config.host.static;
 
     $.root().append('\n<link rel="stylesheet" href="'+static_path+'/css/base.css" type="text/css">');
     $.root().append('\n<link rel="stylesheet" href="'+static_path+'/css/web/member.css" type="text/css">');
@@ -181,7 +181,7 @@ module.exports = {
         var widget_common_path = "/widgets/web/common";
         var widget_path =  "/widgets/web";
         var page_path = "/page/web";
-        var baseurl = '<script>var REQUIREJS_BASE_URL = "'+config.host.protocol + '://'+ config.host.static+'/js/";</script>';
+        var baseurl = '<script>var REQUIREJS_BASE_URL = "'+ config.host.static+'/js/";</script>';
 
         data = _.extend({
             widget_common_path : widget_common_path,

@@ -29,9 +29,20 @@ exports.log = {
 // url mapping related.
 exports.host = {
     name: 'localhost',
-    static: 'localhost/static',
     protocol: 'http',
-    api: 'http://www.gagein.com/svc'
+    port: '80',
+    static_root: '/static',
+    static: 'http://localhost/static'
+}
+
+// api related
+exports.api = {
+    appcode: '09ad5d624c0294d1',
+    hostname: 'gageincn.dyndns.org',
+    protocol: 'http',
+    port: '3031',
+    root: '/svc',
+    url: 'http://gageincn.dyndns.org:3031/svc'
 }
 
 // i18n configures

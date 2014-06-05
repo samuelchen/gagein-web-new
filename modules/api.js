@@ -7,14 +7,21 @@
 var config = require('../config');
 var logger = require('./logger');
 var _ = require('underscore');
-var http = require('http')
+var service = require('https');
+var isHttps = true;
+if (config.api.protocol = 'http') {
+    service = require('http');
+    isHttps = false;
+}
+
+var token = 'a8524a26e3dde365bf0a424e3e697513d6fa28a0d53417ae';
 
 /***********************************************************
  * Mapping required APIs here
  ***********************************************************
  * the api mapping.
  * Generally you just need map the url.
- * Add a "method" function to handle none-standard API call.
+ * Add a "handle" function to handle none-standard API call.
  *
  * naming:
  *   lower case initialized.
@@ -27,14 +34,16 @@ var http = require('http')
  *    1nd arg 'parms' is the parameters map.
  *    2nd arg 'callback' is the function to callback while API responded. It takes one arg 'data'.
  */
+///* fast wrapper func */ function API_WRAPPER() { return { path: arguments[0] ? arguments[0] : null, method: arguments[1] ? arguments[1] : null, handle:arguments[2] ? arguments[2] : null }}
 var api_mapping = {
-    login: { path: '/login'},
-    register: { path: '/register' },
+    login: { path: '/login', method:'POST'},
+    register: { path: '/register', method:'POST' },
     listFollowedCompanies: {
         path: '/list/companies_detail',
-        method: function(parms, callback) {
+        handle: function(parms, callback) {
         }
-    }
+    },
+    listBookmarks: { path: '/member/me/update/get_saved', method:'POST' }
 }
 /*
  * Mapping end
@@ -42,18 +51,20 @@ var api_mapping = {
 
 
 // http request to API
-function _request(url, callback) {
+function _request(url, states, callback) {
     var data = {}; // the return data will be passed to callback
     var body = ''; // response body
     var option = {  // request options
-        path : 'url',
-        method: 'GET',
+        hostname : config.api.hostname,
+        port: config.api.port,
+        path: url,
+        method: states['method'] ? states['method'] : 'GET',
         header: {
 
         }
-    }
+    };
 
-    var req = http.request(options, function(res) {
+    var req = service.request(option, function(res) {
         logger.debug('Response Code:' + res.statusCode);
         res.on('data', function(dat){
             body += dat;
@@ -65,31 +76,35 @@ function _request(url, callback) {
         callback(data);
     }).on('error', function(err){
         logger.warn('Failed API call - ' + url);
-        logger.error(err.message);
+        logger.warn(err.message);
     });
 
     req.end();
 }
 
-// standard api invoking method
-var _invoke = function (path, parms, callback) {
-    logger.debug('API '+ path + ' invoked');
+/* standard api invoking method
+ * arguments:
+ *      states - the key-word values mapping to current api in var api_mapping .
+ *      parms - the key-word parameters the caller passed in. They should be defined in the GageIn API docs.
+ *      callback - the processor to handler the result. Result is defined in function _request().
+ */
+var _invoke = function (states, parms, callback) {
+    logger.debug('API '+ states.path + ' invoked');
     var context = {
-        url:config.host.protocol + '://' + config.host.api,
-        separator:''
+        url: config.api.root + states.path,
+        separator: ''
     };
 
-    if (!parms) {
-    } else {
-        context.url += '?'
-        _.each(parms, function (value, key) {
-            // "this" is "context" (3rd arg)
-            this.url += this.seperator + key + '=' + value ;
-            this.seprator = '&';
-        }, context);
-    };
+    _.extend(parms, {access_token: token, appcode: config.api.appcode});
 
-    return _request(context.url, callback);
+    context.url += '?'
+    _.each(parms, function (value, key) {
+        // "this" is "context" (3rd arg)
+        this.url += this.separator + key + '=' + value ;
+        this.separator = '&';
+    }, context);
+
+    return _request(context.url, states, callback);
 }
 
 // ---- making api mapping ----
@@ -97,14 +112,14 @@ logger.debug('---------- api ----------');
 _.each(api_mapping, function(value, key){
     // "this" means "module.exports" (3rd argument)
 
-    if ('method' in value)
+    if ('handle' in value)
         // customized API invoking
 
         this[key] = (function(k, v) {    //closure for k,v passing
             logger.debug(k + ' is binding to self-defined function' );
             return function(parms, cb) {    // return the wrapped method without passing url in
                 logger.debug('API ' + k + 'is invoked.');
-                return v.method(v.path, parms, cb);  // real method to call
+                return v.handle(v, parms, cb);  // real method to call
             }
         })(key, value);
     else
@@ -114,7 +129,7 @@ _.each(api_mapping, function(value, key){
             logger.debug(k + ' is binding to default API process');
             return function(parms, cb) {
                 logger.debug('API ' + k + 'is invoked.');
-                return _invoke(v.path, parms, cb);
+                return _invoke(v, parms, cb);
             }
         })(key, value);
 
@@ -242,7 +257,13 @@ exports.getSearchList = function (key) {
 }
 
 exports.getBookmarkList = function() {
-    return bookmarksInfo;
+    var parms = {};
+    var result = '';
+    return exports.listBookmarks(parms, function(data) {
+        logger.debug(data);
+        result = data['body'];
+    });
+    //return bookmarksInfo;
 }
 
 exports.addBookmark = function(id) {

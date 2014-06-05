@@ -47,8 +47,7 @@ app.use(i18n.init);
 
 // register helper as a locals function wrapped as mustache expects
 app.use(function (req, res, next) {
-    i18n.init(req, res);
-    logger.warn('>>>> i18 initialized.');
+    //i18n.init(req, res);
     // mustache helper
     res.locals.__ = function () {
         logger.warn('>>>> i18 applied.');
