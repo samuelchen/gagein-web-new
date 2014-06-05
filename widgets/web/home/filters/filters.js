@@ -1,5 +1,5 @@
 ﻿require(['ngapp','util'],function (app,u) {
-    app.controller('filter',function($scope,$location,$rootScope,$http) {
+    app.controller('filter',function($scope,$location,$rootScope,getJSON) {
         var _getFilter = function(){
             var filter,defaultFilter = {
                 trigger : 0,
@@ -18,33 +18,24 @@
             $location.search(filter);
         });
 
-//        $scope.$watch( "filter.search", function(val) {
-//            filter.search = val;
-//            $location.search(filter);
-//        });
-
         $scope.$watch( "filter.relevance", function(val) {
             filter.relevance = val;
             $location.search(filter);
         });
 
-        $scope.searchIndex = -1;
         $scope.searchKeyPress = function(e){
             var ele = e.target;
             var keycode = e.keyCode;
 
             if(keycode == 13){
                 if(~$scope.searchIndex){
-                    var listele = angular.element(u.$(".filters-search-suggest"));
-                    var ele = angular.element(listele.children()[$scope.searchIndex]);
-                    $scope.filter.search = ele.text();
+                    $scope.filter.search = $scope.search.items[$scope.searchIndex].key;
                 }
                 filter.search = $scope.filter.search;
                 $location.search(filter);
-                $scope.searchlist = ""
-            }else if(keycode == 38 || keycode == 40){
-                var listele = angular.element(u.$(".filters-search-suggest"));
-                var len = listele.children().length;
+                $scope.search = ""
+            }else if((keycode == 38 || keycode == 40) && $scope.search.items.length > 0){
+                var len = $scope.search.items.length
                 var val;
                 switch (keycode){
                     case 38:
@@ -63,27 +54,22 @@
                         break;
                 }
                 $scope.searchIndex = val;
-                listele.children().removeClass("selected");
-                angular.element(listele.children()[val]).addClass("selected");
             }
         };
 
-        $scope.searchListIn = function(ele){
-            ele = angular.element(ele);
-            ele.children().removeClass("selected");
-            ele.addClass("selected");
+        $scope.searchListIn = function(index){
+            $scope.searchIndex = index;
         }
 
-        $scope.searchListOut = function(ele){
-            ele = angular.element(ele);
-            ele.removeClass("selected");
+        $scope.searchListOut = function(index){
+            $scope.searchIndex = -1;
         }
 
-        $scope.searchListClick = function(ele){
-            ele = angular.element(ele);
-            $scope.filter.search = ele.text();
+        $scope.searchListClick = function(index){
+            var item = $scope.search.items[index];
+            $scope.filter.search = item.key;
+            $scope.search = "";
             filter.search = $scope.filter.search;
-            $scope.searchlist = "";
             $location.search(filter);
         }
 
@@ -96,18 +82,12 @@
             var key = $scope.filter.search;
             key = u._.trim(key);
             if(key){
-                var p = $http({
-                    method: 'GET',
-                    url: '/home/method/getSearchList',
-                    params : {key : key},
-                    cache : true
-                });
-                p.success(function(data){
+                getJSON('getSearchList',{key : key},function(data){
                     $scope.searchIndex = -1;
-                    $scope.searchlist = data;
-                });
+                    $scope.search = data.search;
+                })
             }else{
-                $scope.searchlist = "";
+                $scope.search = "";
             }
         };
 

@@ -21,11 +21,12 @@ var express = require("express");
 var connect = require("connect");
 var fs = require('fs');
 var i18n = require('i18n');
-var cons = require('consolidate');
+//var cons = require('consolidate');
 
 var logger = require("./modules/logger");
 var config = require("./config");
 var app = express();
+
 
 app.engine('html', cons.mustache);
 

@@ -1,4 +1,6 @@
-//require file , path
+/**
+ * Created by Administrator on 14-6-4.
+ */
 var fs=require('fs');
 var path = require('path');
 
@@ -12,8 +14,6 @@ var query = require('cheerio');
 var logger = require('./modules/logger');
 var config = require('./config');
 
-
-//找到路径下对应js,css,html文件
 var findResource = function(pathname){
     logger.debug('findResource: ' + pathname);
     //查找资源文件
@@ -23,18 +23,19 @@ var findResource = function(pathname){
     _.each(files,function(file){
         var suffix = path.extname(file),temppath;
         if(~[".html",".css"].indexOf(suffix) || (".js" == suffix && !/_controller/.test(file))){
-              if(".html" != suffix){
-                    temppath = pathname.replace(__dirname+"\\" , "");
-                    temppath = temppath.replace(/\\/g,"/");
-                    json[suffix.substr(1)] = "/" + temppath + "/" + file;
-              }else{
-                  json[suffix.substr(1)] = pathname+"\\" + file;
-              }
+            if(".html" != suffix){
+                temppath = pathname.replace(__dirname+"\\" , "");
+                temppath = temppath.replace(/\\/g,"/");
+                json[suffix.substr(1)] = "/" + temppath + "/" + file;
+            }else{
+                json[suffix.substr(1)] = pathname+"\\" + file;
+            }
         }
     });
     //logger.debug(json);
     return json;
 }
+
 
 //获取widget模板
 function getWidgetContent(req){
@@ -58,7 +59,7 @@ function getWidgetContent(req){
     //获取模板数据
     var data = fs.readFileSync(htmlpath, 'utf8');
 
-    var static_path = config.host.static;
+    var static_path = config.host.protocol + '://'+ config.host.static;
 
     var arr = [];
     arr.push('\n<link rel="stylesheet" href="'+static_path+'/css/base.css" type="text/css">');
@@ -73,8 +74,6 @@ function getWidgetContent(req){
     arr.push('<div ng-app="app">\n'+data+'\n</div>');
 
     $ = query.load(arr.join(""));
-
-
 
     return $.html();
 }
@@ -108,7 +107,7 @@ function getPageContent(req){
         var widget_path = $(ele).text().replace(".","/");
         widget_path = path.resolve( path.join(config.dir.root, "widgets/web"), widget_path);
         json.widgets.push(findResource(widget_path));
-    })
+    });
     logger.debug("get resources done!");
 
 
@@ -123,7 +122,7 @@ function getPageContent(req){
             }else{
                 arr.push(r[type]);
             }
-        })
+        });
         return arr;
     }
 
@@ -147,7 +146,7 @@ function getPageContent(req){
         _.each(htmlpaths,function(hpath){
             if(~hpath.indexOf(wtext)){
                 var data = fs.readFileSync(hpath, 'utf8');
-                var data = [
+                data = [
                     "\n<!--start: "+wtext+"-->\n",
                     data,
                     "\n<!--end: "+wtext+"-->\n"
@@ -156,6 +155,7 @@ function getPageContent(req){
             }
         })
     });
+
 
     if($("head link").length){
         $("head link").last().after(csscode);
@@ -174,34 +174,14 @@ function getPageContent(req){
 }
 
 
-function getTemplate(pathname){
-    return  fs.readFileSync(pathname, 'utf8');
-}
-
 module.exports = {
-    getTemplate : getTemplate,
-    findResource : findResource,
-    getPageContent : getPageContent,
-    getWidgetContent : getWidgetContent,
-    render : function(tpl,data){
-        var widget_common_path = "/widgets/web/common";
-        var widget_path =  "/widgets/web";
-        var page_path = "/page/web";
-        var baseurl = '<script>var REQUIREJS_BASE_URL = "'+ config.host.static+'/js/";</script>';
-
-        data = _.extend({
-            widget_common_path : widget_common_path,
-            widget_path : widget_path,
-            page_path : page_path,
-            baseurl : baseurl,
-            config : config
-        }, data);
-
-        return mustache.render(tpl,data);
+    getContent : function(){
+        throw new Error("getContent Not implemented");
+    },
+    getData : function(){
+        throw new Error("getData Not implemented");
+    },
+    getTemplate : function(){
+        throw new Error("getTemplate Not implemented");
     }
-};
-
-
-
-
-
+}

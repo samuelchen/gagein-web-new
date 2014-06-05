@@ -43,8 +43,13 @@ var api_mapping = {
         handle: function(parms, callback) {
         }
     },
-    listBookmarks: { path: '/member/me/update/get_saved', method:'POST' }
+    listBookmarks: { path: '/member/me/update/get_saved', method:'POST' },
+    followComany: { path: '/svc/member/me/company/follow'}
 }
+
+//api.followComany({}, function(data){
+//
+//})
 /*
  * Mapping end
  **********************************************************/
@@ -238,7 +243,7 @@ exports.getNewsList = function () {
     data.news = {};
     data.news.items = [];
 
-    for(var i=0 ,len = Math.round(Math.random() * 4)+1; i<len ;i++){
+    for(var i=0 ,len = Math.round(Math.random() * 2)+1; i<len ;i++){
         data.news.items.push(newsInfo.news.items[i]);
     }
     return data;
