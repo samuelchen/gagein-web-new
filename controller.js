@@ -73,6 +73,34 @@ module.exports = {
         })
     },
     getPageContent : function(req , res){
+        var json = this.getResource(pathname);
+        var self = this;
+        var $ = query.load(json.html);
+        var widgets = $("widget");
+
+
+        var widgets_arr = [];
+        _.each(widgets,function(ele){
+            var widget_element = $(ele);
+            var widget_path = ele.text().replace(".","/");
+            var widget_name = ele.text().split(".")[1];
+            widget_path = path.resolve( path.join(config.dir.root, "widgets/web"), widget_path);
+
+            var widget_type = $(ele).attr("type") || "0";
+            widgets_arr.push({path : widget_path , type : widget_type , ele : widget_element , name : widget_name});
+        });
+
+        logger.debug("get resources done!");
+
+        var chunks_arr = [];
+        _.each(widgets_arr,function(widget){
+            if(widget.type == "1"){
+
+            }else{
+
+            }
+        })
+
 
     },
     getWidgetContent : function(req,res){
