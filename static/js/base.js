@@ -25,4 +25,34 @@ require.config({
     }
 });
 
+require(['angular','angular-route','angular-resource'],function($){
+    console.log("angular init success...")
+});
+
+require(['ngapp'],function($){
+    console.log("ngapp init success...")
+});
+
+
+G = {};
+G.bigpipe = function(obj){
+    var oldEle = document.getElementById(obj.id);
+    var div = document.createElement("div");
+    div.innerHTML = obj.html;
+    var newEle = div.children[0];
+    oldEle.parentNode.replaceChild(newEle,oldEle);
+
+    var head = document.getElementsByTagName("head")[0];
+    var js = document.createElement("script");
+    //<link type="text/css" href="http://static.gagein.com/css/web/member.css" rel="stylesheet">
+    var css = document.createElement("link");
+    css.setAttribute("type","text/css");
+    css.setAttribute("rel","stylesheet");
+
+
+    head.appendChild(js);
+    head.appendChild(css);
+    css.setAttribute("href",obj.css);
+    js.setAttribute("src",obj.js);
+}
 

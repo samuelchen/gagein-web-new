@@ -25,10 +25,11 @@ var i18n = require('i18n');
 
 var logger = require("./modules/logger");
 var config = require("./config");
+var mapping = require("./mapping.json");
 var app = express();
 
 
-app.engine('html', cons.mustache);
+//app.engine('html', cons.mustache);
 
 // middleware to log all requests
 app.use(function(req, res, next){
@@ -61,28 +62,41 @@ app.use(function (req, res, next) {
     next();
 });
 
-var _getController = function(page){
-    if(fs.existsSync(config.dir.root + "/pages/web/" + page + "/" + page + "_controller.js")){
-        //logger.debug("./web/" + req.params.page + "/home_controller");
-        return require(__dirname + "/pages/web/" + page + "/" + page + "_controller");
+var _getContentController = function(page,widget){
+    if(widget){
+        if(fs.existsSync(config.dir.root + "/widgets/web/" + page + "/" + widget + "/" + widget+ "_controller.js")){
+            return require(config.dir.root + "/widgets/web/" + page + "/" +  widget + "/" + widget + "_controller");
+        }else{
+            return require(config.dir.root + "/widgets/web/common/" +  widget + "/" + widget + "_controller");
+        }
+    }else{
+        return require(config.dir.root + "/pages/web/" + page + "/" + page + "_controller");
     }
 };
 
+var _getMethodController = function(page,widget,method){
+    if(fs.existsSync(config.dir.root + '/widgets/web/'+page+'/'+widget+'/'+widget+'_controller.js')){
+        return require(config.dir.root + '/widgets/web/'+page+'/'+widget+'/'+widget+'_controller');
+    }else{
+        return require(config.dir.root + mapping[page + "_" + widget + "_" + method]);
+    }
+}
+
 app.get('/:page', function(req, res){
     if(req.params.page != "favicon.ico"){
-        var controller = _getController(req.params.page);
+        var controller = _getContentController(req.params.page);
         controller.getPageContent(req, res);
     }
 });
 
-app.get('/:page/method/:method', function(req, res){
-    var controller = _getController(req.params.page);
-    controller[req.params.method](req,res);
+app.get('/:page/:widget', function(req, res){
+    var controller = _getContentController(req.params.page,req.params.widget);
+    controller.getWidgetContent(req, res);
 });
 
-app.get('/:page/widget/:widget', function(req, res){
-    var controller = _getController(req.params.page);
-    controller["get" + req.params.widget[0].toUpperCase() + req.params.widget.substr(1).toLowerCase() + "Content" ](req,res);
+app.get('/:page/:widget/:method', function(req, res){
+    var controller = _getMethodController(req.params.page,req.params.widget,req.params.method);
+    controller[req.params.method](req,res);
 });
 
 logger.info('Server Started');

@@ -9,7 +9,7 @@ define(['angular','angular-resource','angular-route'],function (ng) {
 //        app._ = _;
 //    }
 
-    var PAGE_NAME = /[^\/]+/g.exec(location.pathname)[0];
+
 
     app.config(function($interpolateProvider) {
         $interpolateProvider.startSymbol('{%');
@@ -17,15 +17,18 @@ define(['angular','angular-resource','angular-route'],function (ng) {
     });
 
     app.factory('getJSON',function($http,$location) {
+        var PAGE_NAME = location.pathname.split("/")[1];
+        var WIDGET_NAME = location.pathname.split("/")[2];
+
         return function getJSON(api,params,callback){
             if(typeof params == "function"){
                 callback = params;
                 params = {};
             }
             //home/method/getSearchList
-            if(!/method/g.test(api)){
-                api = "/" + PAGE_NAME + "/method/" + api;
-            }
+
+            api = "/" + PAGE_NAME + "/" + WIDGET_NAME + "/" + api;
+
             var p = $http({
                 method: 'GET',
                 url: api,
