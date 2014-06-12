@@ -1,15 +1,5 @@
-define(['angular','angular-resource','angular-route'],function (ng) {
-    var app = ng.module("app",['ngResource','ngRoute']);
-//    if(app._){
-//        throw new Error("app._ Already in use");
-//    }else{
-//        _.str = _s;
-//        _.mixin(_.str.exports());
-//        _.str.include('Underscore.string', 'string');
-//        app._ = _;
-//    }
-
-
+define(['angular'],function (ng) {
+    var app = ng.module("app",[]);
 
     app.config(function($interpolateProvider) {
         $interpolateProvider.startSymbol('{%');
@@ -17,17 +7,12 @@ define(['angular','angular-resource','angular-route'],function (ng) {
     });
 
     app.factory('getJSON',function($http,$location) {
-        var PAGE_NAME = location.pathname.split("/")[1];
-        var WIDGET_NAME = location.pathname.split("/")[2];
-
         return function getJSON(api,params,callback){
             if(typeof params == "function"){
                 callback = params;
                 params = {};
             }
             //home/method/getSearchList
-
-            api = "/" + PAGE_NAME + "/" + WIDGET_NAME + "/" + api;
 
             var p = $http({
                 method: 'GET',

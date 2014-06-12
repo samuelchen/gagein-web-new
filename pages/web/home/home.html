@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" href="{{{config.host.protocol}}}://{{{config.host.static}}}/css/base.css" type="text/css">
     <link rel="stylesheet" href="{{{config.host.protocol}}}://{{{config.host.static}}}/css/web/member.css" type="text/css">
-    {{{baseurl}}}
+    <script>{{{baseurl}}}</script>
     <script src="{{{config.host.protocol}}}://{{{config.host.static}}}/js/require2.1.11.js"></script>
     <script src="{{{config.host.protocol}}}://{{{config.host.static}}}/js/base.js" ></script>
 </head>
@@ -18,8 +18,8 @@
     <div class="content-nav"></div>
     <div class="content-cnt">
         <widget>home.filters</widget>
-        <widget>home.news</widget>
-        <widget>home.bookmarks</widget>
+        <widget sync="true">home.news</widget>
+        <widget sync="true">home.bookmarks</widget>
     </div>
 </div>
 <div style="display: none"><widget>common.footer</widget></div>

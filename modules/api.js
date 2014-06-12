@@ -207,11 +207,11 @@ exports.getPageContent = function(){
 }
 
 exports.getBookmarksContent = function(){
-    return bookmarksInfo
+    return bookmarksInfo.bookmarks.items;
 }
 
 exports.getNewsContent = function(){
-    return newsInfo
+    return newsInfo.news.items
 }
 
 exports.getFiltersContent = function(){
@@ -231,23 +231,18 @@ exports.getNewsList = function () {
     for(var i=0 ,len = Math.round(Math.random() * 2)+1; i<len ;i++){
         data.news.items.push(newsInfo.news.items[i]);
     }
-    return data;
+    return data.news.items;
 }
 
 exports.getSearchList = function (key) {
     var data = _.filter(filtersInfo.search.items, function(item){
         return ~item.key.indexOf(key);
     });
-    data = {
-        search :{
-            items : data
-        }
-    };
     return data;
 }
 
 exports.getBookmarkList = function() {
-    return bookmarksInfo;
+    return bookmarksInfo.bookmarks.items;
 }
 
 exports.addBookmark = function(id) {

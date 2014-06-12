@@ -1,9 +1,8 @@
 <div class="news mode" ng-controller="news">
     <h2 class="nav">News</h2>
     <div class="news-list" >
-        <ul delegate="bookmark" ng-init="news= {{{news_init}}}" >
-            <li class="fclear" ng-repeat="item in news.items" >
-                {%item.id%}
+        <ul delegate="bookmark" ng-init="items = {{{news_data_str}}}">
+            <li class="fclear" ng-repeat="item in items" >
                 <div class="news-list-l fl">
                     <a href="#"><img ng-src="{{{widget_path}}}{%item.company_pic%}" alt="#"/></a>
                     <a href="#"><img ng-src="{{{widget_path}}}{%item.people_pic%}" alt="#"/></a>

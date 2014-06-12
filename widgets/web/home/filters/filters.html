@@ -20,7 +20,8 @@
                 <span class="filters-search-icon finline"></span>
                 <input type="text" placeholder="text" class="gray-cnt" ng-change="searchChange()" ng-keypress="searchKeyPress($event)" ng-blur="searchBlur()" ng-model="filter.search"/>
                 <ol class="filters-search-suggest">
-                    <li ng-repeat="item in search.items" ng-click="searchListClick($index)" ng-class="{selected : $index == searchIndex}" ng-mouseout="searchListOut($index)" ng-mouseover="searchListIn($index)">{%item.key%}</li>
+                    <li ng-repeat="item in search" ng-click="searchListClick($index)" ng-class="{selected : $index == searchIndex}"
+                        ng-mouseout="searchListOut($index)" ng-bind="item.key" ng-mouseover="searchListIn($index)"></li>
                 </ol>
             </li>
         </ul>

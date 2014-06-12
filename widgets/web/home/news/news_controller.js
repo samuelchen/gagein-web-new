@@ -3,11 +3,11 @@ var logger = require('./../../../../modules/logger');
 var api = require('./../../../../modules/api');
 var controller = require('./../../../../controller');
 
-module.exports = _.extend(controller,{
+module.exports = _.extend(_.clone(controller),{
     pathname : __dirname,
     getWidgetData : function(cb){
         var data = api.getNewsContent();
-        data.news_init = this.getObjectString(data.news);
+        data = this.getListData(data);
         cb(data);
     },
     getNewsList : function(req,res){

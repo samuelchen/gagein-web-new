@@ -29,12 +29,12 @@
 
             if(keycode == 13){
                 if(~$scope.searchIndex){
-                    $scope.filter.search = $scope.search.items[$scope.searchIndex].key;
+                    $scope.filter.search = $scope.search[$scope.searchIndex].key;
                 }
                 filter.search = $scope.filter.search;
                 $location.search(filter);
                 $scope.search = ""
-            }else if((keycode == 38 || keycode == 40) && $scope.search.items.length > 0){
+            }else if((keycode == 38 || keycode == 40) && $scope.search.length > 0){
                 var len = $scope.search.items.length
                 var val;
                 switch (keycode){
@@ -66,7 +66,7 @@
         }
 
         $scope.searchListClick = function(index){
-            var item = $scope.search.items[index];
+            var item = $scope.search[index];
             $scope.filter.search = item.key;
             $scope.search = "";
             filter.search = $scope.filter.search;
@@ -82,9 +82,9 @@
             var key = $scope.filter.search;
             key = u._.trim(key);
             if(key){
-                getJSON('getSearchList',{key : key},function(data){
+                getJSON('/home/filters/getSearchList',{key : key},function(data){
                     $scope.searchIndex = -1;
-                    $scope.search = data.search;
+                    $scope.search = data;
                 })
             }else{
                 $scope.search = "";
