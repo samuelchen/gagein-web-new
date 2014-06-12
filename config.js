@@ -29,7 +29,7 @@ exports.log = {
 // url mapping related.
 exports.host = {
     name: 'localhost',
-    static: 'static.gagein.com',
+    static: 'localhost/static',
     protocol: 'http',
     api: 'http://www.gagein.com/svc'
 }

@@ -36,7 +36,7 @@ module.exports = {
         var widget_common_path = "/widgets/web/common";
         var widget_path =  "/widgets/web";
         var page_path = "/page/web";
-        var baseurl = 'var REQUIREJS_BASE_URL = "' + config.host.static + '/js/";';
+        var baseurl = 'var REQUIREJS_BASE_URL = "' + config.host.protocol +'://'+ config.host.static + '/js/";';
 
         //调用每一个widget的接口，获取数据
         this.getWidgetData(function(data){
