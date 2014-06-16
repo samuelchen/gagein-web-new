@@ -245,12 +245,13 @@ module.exports = {
             sync = ~~req.query.sync,
             name = req.params.widget
         self = this;
+        var static_path = config.host.protocol + "://" + config.host.static;
 
         if( renderType == "1"){
             json = this.getResource(this.pathname);
 
             this.getChunk(name , function(obj){
-                var static_path = config.host.static;
+
                 var arr = [];
                 arr.push('\n<link rel="stylesheet" href="'+static_path+'/css/base.css" type="text/css">');
                 arr.push('\n<link rel="stylesheet" href="'+static_path+'/css/web/member.css" type="text/css">\n');
@@ -271,7 +272,6 @@ module.exports = {
             //默认方式输出
             json = this.getResource(this.pathname,sync);
 
-            var static_path = config.host.static;
             var arr = [];
             arr.push('\n<link rel="stylesheet" href="'+static_path+'/css/base.css" type="text/css">');
             arr.push('\n<link rel="stylesheet" href="'+static_path+'/css/web/member.css" type="text/css">');
