@@ -13,3 +13,11 @@
 
 .header-search{float:left;margin-left: 20px;text-align: right; }
 .header-search-btn{display: block;width:142px;height:20px;background-image:url(image/search_btn.jpg);}
+
+.header .form {margin-left:290px;width: 390px;}
+.header .form li{float: left;margin-right: 10px;}
+
+.header .form input{ border: 1px solid #ccc;width: 80px;}
+
+.header-login-msg {float:right;width:135px;margin-right: 20px;}
+

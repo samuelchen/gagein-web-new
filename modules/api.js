@@ -8,6 +8,9 @@ var config = require('../config');
 var logger = require('./logger');
 var _ = require('underscore');
 var service = require('https');
+var Client = require('node-rest-client').Client;
+
+var client = new Client();
 var isHttps = true;
 if (config.api.protocol == 'http') {
     service = require('http');
@@ -38,14 +41,11 @@ var token = 'a8524a26e3dde365bf0a424e3e697513d6fa28a0d53417ae';
 var api_mapping = {
     login: { path: '/login', method:'POST'},
     register: { path: '/register', method:'POST' },
-    listFollowedCompanies: {
-        path: '/list/companies_detail',
-        handle: function(parms, callback) {
-        }
-    },
+    listFollowedCompanies: { path: '/list/companies_detail' },
     listBookmarks: { path: '/member/me/update/get_saved', method:'POST' },
     followComany: { path: '/svc/member/me/company/follow'}
 }
+
 
 //api.followComany({}, function(data){
 //
@@ -56,60 +56,92 @@ var api_mapping = {
 
 
 // http request to API
-function _request(url, states, callback) {
-    var data = {}; // the return data will be passed to callback
-    var body = ''; // response body
-    var option = {  // request options
-        hostname : config.api.hostname,
-        port: config.api.port,
-        path: url,
-        method: states['method'] ? states['method'] : 'GET',
-        header: {
+function _request(url, map, callback  ) {
+    var api_url = config.api.protocol + "://" + config.api.hostname + ":" + config.api.port + url;
+    var method = (map['method'] == "POST" ? map['method'] : 'GET').toLowerCase();
 
-        }
+    var args = {
+        headers:{"test-header":"client-api"}
     };
+    if(method == "post"){
+        args.data = map.data;
+    }
 
-    var req = service.request(option, function(res) {
+    var req = client[method](api_url, args ,function(data, res){
         logger.debug('Response Code:' + res.statusCode);
-        res.on('data', function(dat){
-            body += dat;
-        });
-    }).on('end', function(){
-        logger.info('Succeed API call - ' + url);
-        data.header = res.headers;
-        data.body = body;
+        logger.info('Succeed API call - ' + api_url);
         callback(data);
-    }).on('error', function(err){
-        logger.warn('Failed API call - ' + url);
+    });
+
+    req.on('error',function(err){
+        logger.warn('Failed API call - ' + api_url);
         logger.warn(err.message);
     });
 
-    req.end();
+//    var data = {}; // the return data will be passed to callback
+//    var body = ''; // response body
+//    var option = {  // request options
+//        hostname : config.api.hostname,
+//        port: config.api.port, //config.api.port,
+//        path: url,
+//        method: states['method'] ? states['method'] : 'GET',
+//        rejectUnauthorized: false
+//    };
+//
+//    var req = service.request(option, function(res) {
+//        logger.debug('Response Code:' + res.statusCode);
+//        res.on('data', function(dat){
+//            console.log(process.stdout.write(dat));
+//            body += dat;
+//        });
+//        res.on('end',function(data){
+//            logger.info('Succeed API call - ' + url);
+//            callback(body);
+//        })
+//    }).on('error', function(err){
+//        logger.warn('Failed API call - ' + url);
+//        logger.warn(err.message);
+//    });
+//
+//    req.end(states.data);
 }
 
 /* standard api invoking method
  * arguments:
- *      states - the key-word values mapping to current api in var api_mapping .
+ *      map - the key-word values mapping to current api in var api_mapping .
  *      parms - the key-word parameters the caller passed in. They should be defined in the GageIn API docs.
  *      callback - the processor to handler the result. Result is defined in function _request().
  */
-var _invoke = function (states, parms, callback) {
-    logger.debug('API '+ states.path + ' invoked');
+var _invoke = function (map, parms, callback) {
+    logger.debug('API '+ map.path + ' invoked');
     var context = {
-        url: config.api.root + states.path,
+        url: config.api.root + map.path,
         separator: ''
     };
 
-    _.extend(parms, {access_token: token, appcode: config.api.appcode});
+    //_.extend(parms, {access_token: token, appcode: config.api.appcode});
 
-    context.url += '?'
-    _.each(parms, function (value, key) {
-        // "this" is "context" (3rd arg)
-        this.url += this.separator + key + '=' + value ;
-        this.separator = '&';
-    }, context);
+    if(map.method.toUpperCase() == "GET"){
+        context.url += '?'
+        _.each(parms, function (value, key) {
+            // "this" is "context" (3rd arg)
+            this.url += this.separator + key + '=' + value ;
+            this.separator = '&';
+        }, context);
+    }
 
-    return _request(context.url, states, callback);
+    if(map.method.toUpperCase() == "POST"){
+        var query = "";
+
+        _.each(parms, function (value, key) {
+            // "this" is "context" (3rd arg)
+            query += this.separator + key + '=' + value ;
+            this.separator = '&';
+        },context);
+        map.data = query;
+    }
+
+    return _request(context.url, map, callback );
 }
 
 // ---- making api mapping ----
@@ -117,26 +149,25 @@ logger.debug('---------- api ----------');
 _.each(api_mapping, function(value, key){
     // "this" means "module.exports" (3rd argument)
 
-    if ('handle' in value)
-        // customized API invoking
-
-        this[key] = (function(k, v) {    //closure for k,v passing
-            logger.debug(k + ' is binding to self-defined function' );
-            return function(parms, cb) {    // return the wrapped method without passing url in
-                logger.debug('API ' + k + 'is invoked.');
-                return v.handle(v, parms, cb);  // real method to call
-            }
-        })(key, value);
-    else
+//    if ('handle' in value)
+//        // customized API invoking
+//        this[key] = (function(k, v) {    //closure for k,v passing
+//            logger.debug(k + ' is binding to self-defined function' );
+//            return function(parms, cb) {    // return the wrapped method without passing url in
+//                logger.debug('API ' + k + 'is invoked.');
+//                return v.handle(parms, cb);  // real method to call
+//            }
+//        })(key, value);
+//    else
         // standard API invoking
 
-        this[key] = (function(k, v){
-            logger.debug(k + ' is binding to default API process');
-            return function(parms, cb) {
-                logger.debug('API ' + k + 'is invoked.');
-                return _invoke(v, parms, cb);
-            }
-        })(key, value);
+    this[key] = (function(k, v){
+        logger.debug(k + ' is binding to default API process');
+        return function(parms, cb) {
+            logger.debug('API ' + k + 'is invoked.');
+            return _invoke(v, parms, cb);
+        }
+    })(key, value);
 
 }, module.exports);
 
@@ -217,28 +248,31 @@ var headerInfo = {
     header : {}
 }
 
-exports.getPageContent = function(){
+
+
+
+module.exports.getPageContent = function(){
     return _.extend(newsInfo,bookmarksInfo,filtersInfo,headerInfo);
 }
 
-exports.getBookmarksContent = function(){
+module.exports.getBookmarksContent = function(){
     return bookmarksInfo.bookmarks.items;
 }
 
-exports.getNewsContent = function(){
+module.exports.getNewsContent = function(){
     return newsInfo.news.items
 }
 
-exports.getFiltersContent = function(){
+module.exports.getFiltersContent = function(){
     return filtersInfo
 }
 
-exports.getHeaderContent = function(){
+module.exports.getHeaderContent = function(){
     return headerInfo
 }
 
 
-exports.getNewsList = function () {
+module.exports.getNewsList = function () {
     var data = {};
     data.news = {};
     data.news.items = [];
@@ -249,18 +283,18 @@ exports.getNewsList = function () {
     return data.news.items;
 }
 
-exports.getSearchList = function (key) {
+module.exports.getSearchList = function (key) {
     var data = _.filter(filtersInfo.search.items, function(item){
         return ~item.key.indexOf(key);
     });
     return data;
 }
 
-exports.getBookmarkList = function() {
+module.exports.getBookmarkList = function() {
     return bookmarksInfo.bookmarks.items;
 }
 
-exports.addBookmark = function(id) {
+module.exports.addBookmark = function(id) {
     var data = _.find(bookmarksInfo.bookmarks.items, function(item){
         return item.id == id;
     });
@@ -276,7 +310,7 @@ exports.addBookmark = function(id) {
     }
 }
 
-exports.removeBookmark = function(id) {
+module.exports.removeBookmark = function(id) {
     bookmarksInfo.bookmarks.items = _.filter(bookmarksInfo.bookmarks.items, function(item){
         return item.id != id;
     });

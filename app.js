@@ -21,14 +21,18 @@ var express = require("express");
 var connect = require("connect");
 var fs = require('fs');
 var i18n = require('i18n');
-//var cons = require('consolidate');
+var cons = require('consolidate');
 
 var logger = require("./modules/logger");
 var config = require("./config");
 var mapping = require("./mapping.json");
 var app = express();
+var https = require('https')
 
-
+//app.use(connect.json());
+//app.use(connect.urlencoded());
+//app.use(connect.multipart());
+app.use(connect.bodyParser());
 //app.engine('html', cons.mustache);
 
 // middleware to log all requests
@@ -94,10 +98,16 @@ app.get('/:page/:widget', function(req, res){
     controller.getWidgetContent(req, res);
 });
 
+app.post('/:page/:widget/:method', function(req, res){
+    var controller = _getMethodController(req.params.page,req.params.widget,req.params.method);
+    controller[req.params.method](req,res);
+});
+
 app.get('/:page/:widget/:method', function(req, res){
     var controller = _getMethodController(req.params.page,req.params.widget,req.params.method);
     controller[req.params.method](req,res);
 });
+
 
 logger.info('Server Started');
 

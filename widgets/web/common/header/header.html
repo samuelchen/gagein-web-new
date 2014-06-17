@@ -1,12 +1,22 @@
-<div class="header mode">
+<div class="header mode" ng-controller="header">
     <a class="header-logo" href="{{{config.host.protocol}}}://{{{config.host.name}}}"><img src="{{{widget_common_path}}}/header/image/logo.jpg" alt=""></a>
-    <ul class="header-icon">
-        <li class="header-icon-news"><a href="{{{config.host.protocol}}}://{{{config.host.name}}}/news" >news</a></li>
-        <li class="header-icon-companies"><a href="{{{config.host.protocol}}}://{{{config.host.name}}}/companies">companies</a></li>
-        <li class="header-icon-settings"><a href="{{{config.host.protocol}}}://{{{config.host.name}}}/settings">settings</a></li>
+    <!--<ul class="header-icon">-->
+        <!--<li class="header-icon-news"><a href="{{{config.host.protocol}}}://{{{config.host.name}}}/news" >news</a></li>-->
+        <!--<li class="header-icon-companies"><a href="{{{config.host.protocol}}}://{{{config.host.name}}}/companies">companies</a></li>-->
+        <!--<li class="header-icon-settings"><a href="{{{config.host.protocol}}}://{{{config.host.name}}}/settings">settings</a></li>-->
+    <!--</ul>-->
+    <!--<div class="header-search">-->
+        <!--<a class="header-search-btn" href="#"></a>-->
+        <!--<span class="gray">Advanced</span>-->
+    <!--</div>-->
+
+    <ul class="form gray-cnt" ng-hide="login_state">
+        <li><label for="username">username:</label><input name="username" type="text" ng-model="username"></li>
+        <li><label for="password">password:</label><input name="password" type="password" ng-model="password"></li>
+        <li><input type="button" value="login" ng-click="login()"></li>
     </ul>
-    <div class="header-search">
-        <a class="header-search-btn" href="#"></a>
-        <span class="gray">Advanced</span>
+
+    <div class="header-login-msg" ng-show="login_state">
+        @{%username%}&nbsp;<a href="#" ng-click="logout()">注销</a>
     </div>
 </div>

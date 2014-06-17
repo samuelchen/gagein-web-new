@@ -6,6 +6,25 @@ define(['angular'],function (ng) {
         $interpolateProvider.endSymbol('%}');
     });
 
+    app.factory('post',function($http,$location) {
+        return function post(api,params,callback){
+            if(typeof params == "function"){
+                callback = params;
+                params = {};
+            }
+
+            var p = $http({
+                method: 'POST',
+                url: api,
+                data : params
+            });
+            p.success(function(data){
+                callback(data);
+                p = null;
+            });
+        }
+    })
+
     app.factory('getJSON',function($http,$location) {
         return function getJSON(api,params,callback){
             if(typeof params == "function"){

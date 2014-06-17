@@ -7,7 +7,7 @@
 var path = require('path');
 var i18n = require('i18n');
 
-exports.isDebug = true;
+exports.isDebug = false;
 
 // physical path
 exports.dir = {
@@ -32,6 +32,15 @@ exports.host = {
     static: 'localhost/static',
     protocol: 'http',
     api: 'http://www.gagein.com/svc'
+}
+
+// api related
+exports.api = {
+    appcode: '09ad5d624c0294d1',
+    hostname: 'localhost',
+    port: '8080',
+    root: '/svc',
+    protocol : 'http'
 }
 
 // i18n configures
