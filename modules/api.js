@@ -61,7 +61,7 @@ function _request(url, map, callback  ) {
     var method = (map['method'] == "POST" ? map['method'] : 'GET').toLowerCase();
 
     var args = {
-        headers:{"test-header":"client-api"}
+        headers:{ 'Content-Type': 'application/x-www-form-urlencoded'}
     };
     if(method == "post"){
         args.data = map.data;
