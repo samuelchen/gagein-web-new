@@ -73,7 +73,7 @@ function _request(url, map, callback  ) {
         logger.info('Succeed API call - ' + api_url);
         if(method == "post")
             logger.info('Succeed API params - ' + JSON.stringify(args));
-        callback(data);
+        callback(JSON.parse(data));
     });
 
     req.on('error',function(err){
@@ -180,62 +180,62 @@ logger.debug('---------- api end ----------');
 
 // ========== the following are simulated data =============
 
-var newsInfo = {
-    news : {
-        items : [{
-            id : "1",
-            company_pic : "/home/news/image/company.jpg",
-            people_pic : "/home/news/image/people.jpg",
-            title : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.",
-            content : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic mollitia officiis quidem recusandae ",
-            desc : "48 min ago via LinkedIn"
-        },{
-            id : "2",
-            company_pic : "/home/news/image/company.jpg",
-            people_pic : "/home/news/image/people.jpg",
-            title : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.",
-            content : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic mollitia officiis quidem recusandae ",
-            desc : "48 min ago via LinkedIn"
-        },{
-            id : "3",
-            company_pic : "/home/news/image/company.jpg",
-            people_pic : "/home/news/image/people.jpg",
-            title : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.",
-            content : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic mollitia officiis quidem recusandae ",
-            desc : "48 min ago via LinkedIn"
-        },{
-            id : "4",
-            company_pic : "/home/news/image/company.jpg",
-            people_pic : "/home/news/image/people.jpg",
-            title : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.",
-            content : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic mollitia officiis quidem recusandae ",
-            desc : "48 min ago via LinkedIn"
-        },{
-            id : "5",
-            company_pic : "/home/news/image/company.jpg",
-            people_pic : "/home/news/image/people.jpg",
-            title : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.",
-            content : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic mollitia officiis quidem recusandae ",
-            desc : "48 min ago via LinkedIn"
-        }]
-    }
-}
-
-var bookmarksInfo = {
-    bookmarks : {
-        items :[
-            {
-                id : "1",
-                title : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe."
-            },
-            {
-                id : "4",
-                title : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe."
-            }
-        ]
-    }
-}
-
+//var newsInfo = {
+//    news : {
+//        items : [{
+//            id : "1",
+//            company_pic : "/home/news/image/company.jpg",
+//            people_pic : "/home/news/image/people.jpg",
+//            title : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.",
+//            content : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic mollitia officiis quidem recusandae ",
+//            desc : "48 min ago via LinkedIn"
+//        },{
+//            id : "2",
+//            company_pic : "/home/news/image/company.jpg",
+//            people_pic : "/home/news/image/people.jpg",
+//            title : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.",
+//            content : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic mollitia officiis quidem recusandae ",
+//            desc : "48 min ago via LinkedIn"
+//        },{
+//            id : "3",
+//            company_pic : "/home/news/image/company.jpg",
+//            people_pic : "/home/news/image/people.jpg",
+//            title : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.",
+//            content : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic mollitia officiis quidem recusandae ",
+//            desc : "48 min ago via LinkedIn"
+//        },{
+//            id : "4",
+//            company_pic : "/home/news/image/company.jpg",
+//            people_pic : "/home/news/image/people.jpg",
+//            title : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.",
+//            content : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic mollitia officiis quidem recusandae ",
+//            desc : "48 min ago via LinkedIn"
+//        },{
+//            id : "5",
+//            company_pic : "/home/news/image/company.jpg",
+//            people_pic : "/home/news/image/people.jpg",
+//            title : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe.",
+//            content : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus blanditiis ducimus hic mollitia officiis quidem recusandae ",
+//            desc : "48 min ago via LinkedIn"
+//        }]
+//    }
+//}
+//
+//var bookmarksInfo = {
+//    bookmarks : {
+//        items :[
+//            {
+//                id : "1",
+//                title : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe."
+//            },
+//            {
+//                id : "4",
+//                title : "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Saepe."
+//            }
+//        ]
+//    }
+//}
+//
 var filtersInfo = {
     search : {
         items :[
@@ -247,33 +247,33 @@ var filtersInfo = {
         ]
     }
 }
-
-var headerInfo = {
-    header : {}
-}
-
-
+//
+//var headerInfo = {
+//    header : {}
+//}
 
 
-module.exports.getPageContent = function(){
-    return _.extend(newsInfo,bookmarksInfo,filtersInfo,headerInfo);
-}
 
-module.exports.getBookmarksContent = function(){
-    return bookmarksInfo.bookmarks.items;
-}
 
-module.exports.getNewsContent = function(){
-    return newsInfo.news.items
-}
+//module.exports.getPageContent = function(){
+//    return _.extend(newsInfo,bookmarksInfo,filtersInfo,headerInfo);
+//}
 
+//module.exports.getBookmarksContent = function(){
+//    return bookmarksInfo.bookmarks.items;
+//}
+//
+//module.exports.getNewsContent = function(){
+//    return newsInfo.news.items
+//}
+//
 module.exports.getFiltersContent = function(){
     return filtersInfo
 }
-
-module.exports.getHeaderContent = function(){
-    return headerInfo
-}
+//
+//module.exports.getHeaderContent = function(){
+//    return headerInfo
+//}
 
 
 //module.exports.getNewsList = function () {

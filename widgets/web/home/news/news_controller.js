@@ -15,13 +15,12 @@ module.exports = _.extend(_.clone(controller),{
             newsid : 0,
             orgid : 1231041 //sina
         },function(data){
-            data = self.getListData(JSON.parse(data).data.info);
-            cb(data)
+            cb(data.data.info)
         });
     },
     getNewsList : function(req,res){
         api.getNewsList(req.query,function(data){
-            res.send(JSON.stringify(JSON.parse(data).data.info));
+            res.send(data.data.info);
         });
     }
 });

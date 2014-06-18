@@ -10,16 +10,22 @@ var mustache = require('mustache');
 var async = require('async');
 
 
+
 module.exports = {
     pathname : __dirname,
-    //1(facebook) , 2(淘宝) , 0(默认)
-    renderType : "0",
+    //renderType 在页面中定义 ：1(facebook) , 2(淘宝) , 0(默认)
     getObjectString : function(data){
         //将对象变成，标签属性值
         return JSON.stringify(data).replace(/'/g,"\\'").replace(/"/g,"'");
     },
     getWidgetData : function(callback){
         callback({});
+    },
+    setPageController : function(controller){
+        this.page_controller = controller;
+    },
+    getPageController : function(){
+        return this.page_controller || {};
     },
 /*
     /home/news
@@ -32,20 +38,28 @@ module.exports = {
             name = this.pathname.split("\\");
         name = name.pop();
         obj[name +"_data"] = data;
-        if(this.renderType == "0"){
-            obj[name +"_data_str"] = this.getObjectString(data);
-        }
+        obj[name +"_data_str"] = this.getObjectString(data);
         return obj;
     },
-    getData : function(callback){
+    getData : function(callback , sync){
         //渲染之前，添加额外的参数
         var widget_common_path = "/widgets/web/common";
         var widget_path =  "/widgets/web";
         var page_path = "/page/web";
         var baseurl = 'var REQUIREJS_BASE_URL = "' + config.host.protocol +'://'+ config.host.static + '/js/";';
 
+        var self = this;
         //调用每一个widget的接口，获取数据
-        this.getWidgetData(function(data){
+
+        //getNewsWidgetData , getFiltersWidgetData
+        var name = this.pathname.split("\\");
+        name = name.pop();
+        var reg = /\b(\w)|\s(\w)/g;
+        name = name.toLowerCase();
+        name = name.replace(reg,function(m){return m.toUpperCase()});
+
+        (this.getPageController()["get"+name+"WidgetData"] || this.getWidgetData)(function(data){
+            sync && (data = self.getListData(data));
             data = _.extend(data,{
                 widget_common_path : widget_common_path,
                 widget_path : widget_path,
@@ -76,12 +90,12 @@ module.exports = {
                     }
                 }else{
                     json["html"] = fs.readFileSync(pathname+"\\" + file, 'utf8');
-                    if(sync){
-                        $ = query.load(json["html"]);
-                        //将模板变成
-                        var child_ele = $($("[ng-repeat]")[0]);
 
-                        var parent_ele = child_ele.parent("[ng-init]");
+                    $ = query.load(json["html"]);
+                    //将模板变成
+                    var child_ele = $($("[ng-repeat]")[0]);
+                    var parent_ele = child_ele.parent("[ng-init]");
+                    if(sync){
                         var parent_c_ele = parent_ele.clone();
                         var child_c_ele = parent_c_ele.children("[ng-repeat]")
 
@@ -97,6 +111,9 @@ module.exports = {
                         content = content.replace(/{%/g,"{{").replace(/%}/g,"}}").replace(new RegExp(item + "\\.","g"), "").replace(/ng-/g,"");
                         parent_c_ele.html('\n{{#'+items_data+'}}\n' + content + '\n{{/'+items_data+'}}\n');
                         parent_ele.before(parent_c_ele);
+                        json["html"] = $.html();
+                    }else{
+                        parent_ele.removeAttr("ng-init");
                         json["html"] = $.html();
                     }
                 }
@@ -159,6 +176,9 @@ module.exports = {
         var self = this;
         var $ = query.load(json.html);
         var widgets = $("widget");
+        //只识别小写
+        var renderType = $("body").attr("rendertype") || "0";
+        $("body").removeAttr("rendertype");
 
 
         var widgets_arr = [];
@@ -178,7 +198,7 @@ module.exports = {
         var resource = [json],
             content,
             widget_r;
-        if(self.renderType == "1"){
+        if(renderType == "1"){
             _.each(widgets_arr,function(widget){
                 content = self.chunk(widget.name);
                 widget.ele.replaceWith('\n<!--start  ' + widget.name + '-->\n' + content + '\n<!--end  ' + widget.name + '-->\n');
@@ -192,6 +212,7 @@ module.exports = {
                 async.each(widgets_arr,function(widget,callback){
                     var widget_r = self.getResource(widget.path);
                     var controller = require(widget_r.controller);
+                    controller.setPageController(self);
                     controller.getChunk(widget.name , function(obj){
                         //模拟随机输出
                         setTimeout(function(){
@@ -215,6 +236,7 @@ module.exports = {
         }else{
             _.each(widgets_arr,function(widget){
                 var widget_r = self.getResource(widget.path,widget.sync);
+                widget_r.sync = widget.sync;
                 resource.push(widget_r);
                 widget.ele.replaceWith('\n<!--start  ' + widget.name + '-->\n' + widget_r.html + '\n<!--end  ' + widget.name + '-->\n');
             });
@@ -226,14 +248,12 @@ module.exports = {
             async.each(resource, function(r ,callback){
                 //node 里面require是异步的，用的是在调用
                 var controller = require(r.controller);
-                if(!controller.getWidgetData){
-                    throw new Error("error : " + r.controller + "controller has no getWidgetData")
-                }
+                controller.setPageController(self);
 
-                controller.getData && controller.getData(function(data){
+                controller.getData(function(data){
                     _.extend(d , data);
                     callback();
-                })
+                },r.sync)
             },function(err){
                 if( err ) {
                     logger.debug('A widget getdata failed to process');
@@ -247,7 +267,7 @@ module.exports = {
     },
     getWidgetContent : function(req,res){
         //1(facebook) , 2(淘宝) , 0(默认)
-        var renderType = req.query.renderType,
+        var renderType = req.query.renderType || "0",
             sync = ~~req.query.sync,
             name = req.params.widget
         self = this;

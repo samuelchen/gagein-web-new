@@ -14,23 +14,20 @@ module.exports = _.extend(_.clone(controller),{
             tagid : 1,
             access_token : 'd01cd9e3d9ffec757d98bb4346f1c7b1'
         },function(data){
-            var data = JSON.parse(data);
             if(data.status == '5'){
-                data = self.getListData([]);
+                cb([]);
             }else if(data.status == '1'){
-                data = self.getListData(JSON.parse(data).data.info);
+                cb(data.data.info)
             }
-            cb(data);
         });
 
     },
     getBookmarkList : function(req,res){
         var data = api.getBookmarkList(req.body,function(data){
-            var data = JSON.parse(data);
             if(data.status == '5'){
-                res.send(JSON.stringify([]));
+                res.send([]);
             }else if(data.status == '1'){
-                res.send(JSON.stringify(data.data.info));
+                res.send(data.data.info);
             }
         });
     },

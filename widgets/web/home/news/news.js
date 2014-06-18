@@ -28,7 +28,13 @@
         });
         $scope.$emit('newupdate');
 
+        //初始化不调用请求
+        var init_flag = false;
         $rootScope.$on('$locationChangeSuccess', function(){
+            if(!init_flag) {
+                init_flag = true;
+                return;
+            }
             var filters = $location.search();
             getJSON('/home/news/getNewsList', _.extend(filters,{
                 access_token : shareObject.token || 'd01cd9e3d9ffec757d98bb4346f1c7b1',

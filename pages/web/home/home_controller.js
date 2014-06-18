@@ -9,4 +9,8 @@ module.exports = _.extend(_.clone(controller),{
     getPathname : function(){
         return this.pathname;
     }
+//,
+//    getNewsWidgetData : function(callback){
+//        callback([])
+//    }
 });

@@ -80,10 +80,10 @@ var _getContentController = function(page,widget){
 };
 
 var _getMethodController = function(page,widget,method){
-    if(fs.existsSync(config.dir.root + '/widgets/web/'+page+'/'+widget+'/'+widget+'_controller.js')){
-        return require(config.dir.root + '/widgets/web/'+page+'/'+widget+'/'+widget+'_controller');
-    }else{
+    if(fs.existsSync(config.dir.root + mapping[page + "_" + widget + "_" + method])){
         return require(config.dir.root + mapping[page + "_" + widget + "_" + method]);
+    }else if(fs.existsSync(config.dir.root + '/widgets/web/'+page+'/'+widget+'/'+widget+'_controller.js')){
+        return require(config.dir.root + '/widgets/web/'+page+'/'+widget+'/'+widget+'_controller');
     }
 }
 
