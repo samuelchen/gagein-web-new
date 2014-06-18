@@ -1,7 +1,13 @@
 ﻿require(['ngapp',"util"],function (app,u) {
 
-    app.controller('bookmarks',function($scope,getJSON,shareObject) {
-        getJSON('/home/bookmarks/getBookmarkList',function(data){
+    app.controller('bookmarks',function($scope,post,shareObject) {
+        post('/home/bookmarks/getBookmarkList',{
+            page : 1,
+            orgid : 1231041,
+            note : "",
+            tagid : 1,
+            access_token : shareObject.token || 'd01cd9e3d9ffec757d98bb4346f1c7b1'
+        },function(data){
             $scope.items = data;
             if( $scope.items.length > 3){
                 $scope.bookmark_more = true;
@@ -20,23 +26,21 @@
         }
 
         $scope.removeBookmark = function(index){
-            getJSON('/home/bookmarks/removeBookmark',{id : $scope.items[index].id},function(data){
-                var item = $scope.items.splice(index,1);
-
-                $scope.$root.$emit('removebookmark',item[0].id)
-            })
+            $scope.$root.$emit('removebookmark',$scope.items[index])
         };
 
-        $scope.$root.$on('addbookmark', function(event,id,cb){
-
-            var item = u._.find($scope.bookmarks,function(item){
-                return item.id == id
+        $scope.$root.$on('addbookmark', function(event,n,cb){
+            var item = u._.find($scope.items,function(item){
+                return item.newsid == n.newsid
             });
 
             if(!item){
-                getJSON('/home/bookmarks/addBookmark',{id : id},function(data){
-                    if(!_.isEmpty(data)){
-                        $scope.items.unshift(data);
+                post('/home/bookmarks/addBookmark',{
+                    access_token : shareObject.token || 'd01cd9e3d9ffec757d98bb4346f1c7b1',
+                    newsid : n.newsid
+                },function(data){
+                    if(data.status == "1"){
+                        $scope.items.unshift(n);
                         if($scope.items.length > 3 && !$scope.bookmark_more_hasclick){
                             $scope.bookmark_more = true;
                         }
@@ -46,13 +50,18 @@
             }
         });
 
-        $scope.$root.$on('removebookmark',function(event,id,cb){
-            getJSON('/home/bookmarks/removeBookmark',{id : id},function(data){
-                $scope.items = u._.reject($scope.items,function(item){ return item.id == data.id });
-                if($scope.items.length <= 3){
-                    $scope.bookmark_more = false;
+        $scope.$root.$on('removebookmark',function(event,n,cb){
+            post('/home/bookmarks/removeBookmark',{
+                access_token : shareObject.token || 'd01cd9e3d9ffec757d98bb4346f1c7b1',
+                newsid : n.newsid
+            },function(data){
+                if(data.status == "1"){
+                    $scope.items = u._.reject($scope.items,function(item){ return item.newsid == n.newsid });
+                    if($scope.items.length <= 3){
+                        $scope.bookmark_more = false;
+                    }
+                    cb && cb();
                 }
-                cb && cb();
             })
         });
     });

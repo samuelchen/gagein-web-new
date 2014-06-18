@@ -1,35 +1,39 @@
 ﻿require(['ngapp','util'],function (app,u) {
-    app.controller('header',function($scope,$location,$rootScope,post) {
-        $scope.username = "cchen@gagein.com";
+    app.controller('header',function($scope,$location,$rootScope,post,shareObject) {
+        $scope.mail = "cchen@gagein.com";
         $scope.password = "83773835";
 
         $scope.login = function(){
-            var name = $scope.username;
+            var mail = $scope.mail;
             var pass = $scope.password;
 
             post("/common/header/login" , {
-                username : name ,
+                mail : mail ,
                 password : pass
-            },function(data){
-                if(data.status == "1"){
+            },function(d){
+                if(d.status == "1"){
                     $scope.login_state = true;
+                    $scope.user = d.data;
+                    shareObject.token = d.data.access_token;
                 }else{
-                    console.log(data.msg);
+                    console.log(d.msg);
                 }
             })
         }
 
-        $scope.logout = function(){
-            var name = $scope.username;
-            post("/common/header/logout" , {
-                username : name
-            },function(data){
-                if(data.status == "1"){
-                    $scope.login_state = false;
-                }else{
-                    console.log(data.msg);
-                }
-            })
-        }
+        $scope.login();
+
+//        $scope.logout = function(){
+//            var mail = $scope.mail;
+//            post("/common/header/logout" , {
+//                mail : mail
+//            },function(data){
+//                if(data.status == "1"){
+//                    $scope.login_state = false;
+//                }else{
+//                    console.log(data.msg);
+//                }
+//            })
+//        }
     })
 })

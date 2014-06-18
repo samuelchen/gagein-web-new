@@ -3,7 +3,7 @@
 <div class="bookmarks-content gray-cnt" ng-class="{open : bookmark_open}">
     <ul ng-init="items = {{{bookmarks_data_str}}}">
         <li class="fclear" ng-repeat="item in items">
-            <a href="javascript:" bmid="{%item.id%}" ng-click="removeBookmark($index)">x</a><p>{%item.title%}</p>
+            <a href="javascript:" bmid="{%item.newsid%}" ng-click="removeBookmark($index)">x</a><p>{%item.news_headline%}</p>
         </li>
     </ul>
 </div>

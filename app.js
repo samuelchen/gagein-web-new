@@ -70,7 +70,8 @@ var _getContentController = function(page,widget){
     if(widget){
         if(fs.existsSync(config.dir.root + "/widgets/web/" + page + "/" + widget + "/" + widget+ "_controller.js")){
             return require(config.dir.root + "/widgets/web/" + page + "/" +  widget + "/" + widget + "_controller");
-        }else{
+        }
+        if(fs.existsSync(config.dir.root + "/widgets/web/common/" +  widget + "/" + widget + "_controller.js")){
             return require(config.dir.root + "/widgets/web/common/" +  widget + "/" + widget + "_controller");
         }
     }else{
@@ -89,23 +90,27 @@ var _getMethodController = function(page,widget,method){
 app.get('/:page', function(req, res){
     if(req.params.page != "favicon.ico"){
         var controller = _getContentController(req.params.page);
-        controller.getPageContent(req, res);
+        if(controller &&  controller.getPageContent)
+            controller.getPageContent(req, res);
     }
 });
 
 app.get('/:page/:widget', function(req, res){
     var controller = _getContentController(req.params.page,req.params.widget);
-    controller.getWidgetContent(req, res);
+    if(controller &&  controller.getWidgetContent)
+        controller.getWidgetContent(req, res);
 });
 
 app.post('/:page/:widget/:method', function(req, res){
     var controller = _getMethodController(req.params.page,req.params.widget,req.params.method);
-    controller[req.params.method](req,res);
+    if(controller &&  controller[req.params.method])
+        controller[req.params.method](req,res);
 });
 
 app.get('/:page/:widget/:method', function(req, res){
     var controller = _getMethodController(req.params.page,req.params.widget,req.params.method);
-    controller[req.params.method](req,res);
+    if(controller &&  controller[req.params.method])
+        controller[req.params.method](req,res);
 });
 
 

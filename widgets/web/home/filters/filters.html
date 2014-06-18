@@ -3,19 +3,19 @@
     <div class="fiters-list filters-triggers open" ng-class="{open : filter_triggers_open}" >
         <h3 class="black-h2" ng-click="open($event,'triggers')">News Triggers</h3>
         <ul class="gray-cnt " ng-class="{fhide : !filter_triggers_open}">
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" checked value="0"/>All</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="1"/>Awards & Certifications</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="2"/>Business Challenges</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="3"/>Contracts</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="4"/>Funding</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="5"/>Growth & Expansion</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="6"/>Hiring & Recruiting</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="7"/>Litigations</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="8"/>Mergers & Aquisitions</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="9"/>Offerings</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="10" />Partnerships</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="11" />Personnel Changes</li>
-            <li><input type="radio" name="triggers" ng-model="filter.trigger" value="12" />Real Estate</li>
+            <li><input type="radio" name="triggers" ng-model="filter.agentid" checked value="-1"/>All</li>
+            <li><input type="radio" name="triggers" ng-model="filter.agentid" value="2_1"/>Awards & Certifications</li>
+            <li><input type="radio" name="triggers" ng-model="filter.agentid" value="2_2"/>Business Challenges</li>
+            <li><input type="radio" name="triggers" ng-model="filter.agentid" value="2_3"/>Contracts</li>
+            <li><input type="radio" name="triggers" ng-model="filter.agentid" value="2_4"/>Funding</li>
+            <li><input type="radio" name="triggers" ng-model="filter.agentid" value="2_5"/>Growth & Expansion</li>
+            <li><input type="radio" name="triggers" ng-model="filter.agentid" value="2_6"/>Hiring & Recruiting</li>
+            <li><input type="radio" name="triggers" ng-model="filter.agentid" value="2_7"/>Litigations</li>
+            <li><input type="radio" name="triggers" ng-model="filter.agentid" value="2_8"/>Mergers & Aquisitions</li>
+            <li><input type="radio" name="triggers" ng-model="filter.agentid" value="2_9"/>Offerings</li>
+            <li><input type="radio" name="triggers" ng-model="filter.agentid" value="2_10" />Partnerships</li>
+            <li><input type="radio" name="triggers" ng-model="filter.agentid" value="2_11" />Personnel Changes</li>
+            <li><input type="radio" name="triggers" ng-model="filter.agentid" value="2_12" />Real Estate</li>
             <li>
                 <span class="filters-search-icon finline"></span>
                 <input type="text" placeholder="text" class="gray-cnt" ng-change="searchChange()" ng-keypress="searchKeyPress($event)" ng-blur="searchBlur()" ng-model="filter.search"/>
@@ -29,12 +29,12 @@
     <div class="fiters-list filters-relevance" ng-class="{open : filter_relevance_open}">
         <h3 class="black-h2" ng-click="open($event,'relevance')">News Relevance</h3>
         <ul class="gray-cnt fhide" ng-class="{fhide : !filter_relevance_open}">
-            <li><input type="radio" name="relevance"  ng-model="filter.relevance" checked value="0"/>More Relevant</li>
-            <li><input type="radio" name="relevance"  ng-model="filter.relevance" value="1"/>More News</li>
+            <li><input type="radio" name="relevance"  ng-model="filter.relevance" checked value="40"/>More Relevant</li>
+            <li><input type="radio" name="relevance"  ng-model="filter.relevance" value="10"/>More News</li>
         </ul>
     </div>
     {{#config.isDebug}}
-        <div>triggers : <span ng-bind="filter.trigger"></span></div>
+        <div>triggers : <span ng-bind="filter.agentid"></span></div>
         <div>search : <span ng-bind="filter.search"></span></div>
         <div>relevance : <span ng-bind="filter.relevance"></span></div>
         <div>search.items : <span>{%search.items%}</span></div>

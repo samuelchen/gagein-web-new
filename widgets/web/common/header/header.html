@@ -11,12 +11,13 @@
     <!--</div>-->
 
     <ul class="form gray-cnt" ng-hide="login_state">
-        <li><label for="username">username:</label><input name="username" type="text" ng-model="username"></li>
+        <li><label for="username">mail:</label><input name="username" type="text" ng-model="mail"></li>
         <li><label for="password">password:</label><input name="password" type="password" ng-model="password"></li>
         <li><input type="button" value="login" ng-click="login()"></li>
     </ul>
 
     <div class="header-login-msg" ng-show="login_state">
-        @{%username%}&nbsp;<a href="#" ng-click="logout()">注销</a>
+        @<span ng-bind="user.mem_full_name"></span>&nbsp;
+        <!--<a href="#" ng-click="logout()">注销</a>-->
     </div>
 </div>

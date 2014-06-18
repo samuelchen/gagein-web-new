@@ -17,7 +17,7 @@ if (config.api.protocol == 'http') {
     isHttps = false;
 }
 
-var token = 'a8524a26e3dde365bf0a424e3e697513d6fa28a0d53417ae';
+//var token = 'a8524a26e3dde365bf0a424e3e697513d6fa28a0d53417ae';
 
 /***********************************************************
  * Mapping required APIs here
@@ -39,11 +39,12 @@ var token = 'a8524a26e3dde365bf0a424e3e697513d6fa28a0d53417ae';
  */
 ///* fast wrapper func */ function API_WRAPPER() { return { path: arguments[0] ? arguments[0] : null, method: arguments[1] ? arguments[1] : null, handle:arguments[2] ? arguments[2] : null }}
 var api_mapping = {
-    login: { path: '/login', method:'POST'},
-    register: { path: '/register', method:'POST' },
-    listFollowedCompanies: { path: '/list/companies_detail' },
-    listBookmarks: { path: '/member/me/update/get_saved', method:'POST' },
-    followComany: { path: '/svc/member/me/company/follow'}
+    login: { path: '/login', method:'POST' },
+    getBookmarkList: { path: '/member/me/update/get_saved',method:'POST'},
+    addBookmark: { path: '/member/me/update/save', method:'POST'},
+    removeBookmark: { path: '/member/me/update/unsave', method:'POST'},
+    //getSearchList: { path: '/login', method:'POST'},
+    getNewsList : { path: '/member/me/update/tracker'}
 }
 
 
@@ -70,6 +71,8 @@ function _request(url, map, callback  ) {
     var req = client[method](api_url, args ,function(data, res){
         logger.debug('Response Code:' + res.statusCode);
         logger.info('Succeed API call - ' + api_url);
+        if(method == "post")
+            logger.info('Succeed API params - ' + JSON.stringify(args));
         callback(data);
     });
 
@@ -119,9 +122,10 @@ var _invoke = function (map, parms, callback) {
         separator: ''
     };
 
-    //_.extend(parms, {access_token: token, appcode: config.api.appcode});
+    _.extend(parms, { appcode: config.api.appcode});
+    var method = (map['method'] == "POST" ? map['method'] : 'GET').toLowerCase();
 
-    if(map.method.toUpperCase() == "GET"){
+    if(method == "get"){
         context.url += '?'
         _.each(parms, function (value, key) {
             // "this" is "context" (3rd arg)
@@ -130,7 +134,7 @@ var _invoke = function (map, parms, callback) {
         }, context);
     }
 
-    if(map.method.toUpperCase() == "POST"){
+    if(method == "post"){
         var query = "";
 
         _.each(parms, function (value, key) {
@@ -150,7 +154,7 @@ _.each(api_mapping, function(value, key){
     // "this" means "module.exports" (3rd argument)
 
 //    if ('handle' in value)
-//        // customized API invoking
+//    // customized API invoking
 //        this[key] = (function(k, v) {    //closure for k,v passing
 //            logger.debug(k + ' is binding to self-defined function' );
 //            return function(parms, cb) {    // return the wrapped method without passing url in
@@ -159,7 +163,7 @@ _.each(api_mapping, function(value, key){
 //            }
 //        })(key, value);
 //    else
-        // standard API invoking
+//        //standard API invoking
 
     this[key] = (function(k, v){
         logger.debug(k + ' is binding to default API process');
@@ -272,16 +276,16 @@ module.exports.getHeaderContent = function(){
 }
 
 
-module.exports.getNewsList = function () {
-    var data = {};
-    data.news = {};
-    data.news.items = [];
-
-    for(var i=0 ,len = Math.round(Math.random() * 2)+1; i<len ;i++){
-        data.news.items.push(newsInfo.news.items[i]);
-    }
-    return data.news.items;
-}
+//module.exports.getNewsList = function () {
+//    var data = {};
+//    data.news = {};
+//    data.news.items = [];
+//
+//    for(var i=0 ,len = Math.round(Math.random() * 2)+1; i<len ;i++){
+//        data.news.items.push(newsInfo.news.items[i]);
+//    }
+//    return data.news.items;
+//}
 
 module.exports.getSearchList = function (key) {
     var data = _.filter(filtersInfo.search.items, function(item){
@@ -290,32 +294,32 @@ module.exports.getSearchList = function (key) {
     return data;
 }
 
-module.exports.getBookmarkList = function() {
-    return bookmarksInfo.bookmarks.items;
-}
+//module.exports.getBookmarkList = function() {
+//    return bookmarksInfo.bookmarks.items;
+//}
 
-module.exports.addBookmark = function(id) {
-    var data = _.find(bookmarksInfo.bookmarks.items, function(item){
-        return item.id == id;
-    });
-    if(!data){
-        data = _.filter(newsInfo.news.items, function(item){
-            return item.id == id;
-        })[0];
-        data = {id : data.id , title : data.title};
-        bookmarksInfo.bookmarks.items.unshift(data);
-        return data;
-    }else{
-        return {};
-    }
-}
-
-module.exports.removeBookmark = function(id) {
-    bookmarksInfo.bookmarks.items = _.filter(bookmarksInfo.bookmarks.items, function(item){
-        return item.id != id;
-    });
-    return {id : id};
-}
+//module.exports.addBookmark = function(id) {
+//    var data = _.find(bookmarksInfo.bookmarks.items, function(item){
+//        return item.id == id;
+//    });
+//    if(!data){
+//        data = _.filter(newsInfo.news.items, function(item){
+//            return item.id == id;
+//        })[0];
+//        data = {id : data.id , title : data.title};
+//        bookmarksInfo.bookmarks.items.unshift(data);
+//        return data;
+//    }else{
+//        return {};
+//    }
+//}
+//
+//module.exports.removeBookmark = function(id) {
+//    bookmarksInfo.bookmarks.items = _.filter(bookmarksInfo.bookmarks.items, function(item){
+//        return item.id != id;
+//    });
+//    return {id : id};
+//}
 
 
 

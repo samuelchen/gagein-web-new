@@ -6,7 +6,7 @@ var controller = require('./../../../../controller');
 module.exports = _.extend(_.clone(controller),{
     pathname : __dirname,
     login : function(req,res){
-        var mem_email = req.body.username;
+        var mem_email = req.body.mail;
         var mem_password = req.body.password;
 
         api.login({

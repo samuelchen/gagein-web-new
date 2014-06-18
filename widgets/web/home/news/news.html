@@ -4,15 +4,15 @@
         <ul ng-init="items = {{{news_data_str}}}">
             <li class="fclear" ng-repeat="item in items" >
                 <div class="news-list-l fl">
-                    <a href="#"><img ng-src="{{{widget_path}}}{%item.company_pic%}" alt="#"/></a>
-                    <a href="#"><img ng-src="{{{widget_path}}}{%item.people_pic%}" alt="#"/></a>
+                    <a href="{%item.org_website%}"><img ng-src="{%item.org_logo_path%}" alt="#"/></a>
+                    <a href="{%item.org_website%}"><img ng-src="{%item.org_logo_path%}" alt="#"/></a>
                 </div>
                 <div class="news-list-r fl">
-                    <a href="#"><h2 class="black-h1">{%item.title%}</h2></a>
-                    <p class="gray-cnt">{%item.content%}</p>
-                    <span class="gray-desc">{%item.desc%}</span>
+                    <a href="#"><h2 class="black-h1">{%item.org_name%}</h2></a>
+                    <p class="gray-cnt">{%item.news_headline%}</p>
+                    <span class="gray-desc">{%item.Tuttobasket.net%}</span>
                     <div class="news-icon">
-                        <a href="javascript:" class="news-icon-bookmark" ng-click="bookmark($index)" ng-class="{selected : item.isSelected}">Bookmark</a>
+                        <a href="javascript:" class="news-icon-bookmark" ng-click="bookmark($index)" ng-class="{selected : item.liked}">Bookmark</a>
                     </div>
                 </div>
             </li>

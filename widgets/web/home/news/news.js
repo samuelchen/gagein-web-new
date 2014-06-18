@@ -1,23 +1,23 @@
 ﻿require(['ngapp','util'],function (app,u) {
     app.controller('news',function($scope,$rootScope,$location,getJSON,shareObject) {
-        $scope.$root.$on('removebookmark',function(event,id){
+        $scope.$root.$on('removebookmark',function(event,n){
             var item = u._.filter($scope.items,function(item){
-                return item.id == id
+                return item.newsid == n.newsid
             })[0];
-            item.isSelected = false;
+            item.liked = false;
         });
 
         $scope.$root.$on('updatenewbookmark',function(event){
-            if(!shareObject.bookmarks || !shareObject.news  ){
+            if(!shareObject.bookmarks || !shareObject.news ){
                 return ;
             }
             var ids = [];
             u._.each(shareObject.bookmarks,function(item){
-                ids.push(item.id);
+                ids.push(item.newsid);
             });
 
             u._.each($scope.items,function(item){
-                item.isSelected = ~u._.indexOf(ids,item.id) ? true : false;
+                item.liked = ~u._.indexOf(ids,item.newsid) ? true : false;
             });
         });
 
@@ -27,24 +27,32 @@
             $scope.$root.$emit('updatenewbookmark');
         });
         $scope.$emit('newupdate');
+
         $rootScope.$on('$locationChangeSuccess', function(){
             var filters = $location.search();
-            getJSON('/home/news/getNewsList',filters,function(data){
-                $scope.items = $scope.items.concat(data)
+            getJSON('/home/news/getNewsList', _.extend(filters,{
+                access_token : shareObject.token || 'd01cd9e3d9ffec757d98bb4346f1c7b1',
+                page : 1,
+                pageflag : 0,
+                pagetime :0 ,
+                newsid : 0,
+                orgid : 1231041 //sina
+            }),function(data){
+                //$scope.items = $scope.items.concat(data)
+                $scope.items = data
                 $scope.$emit('newupdate');
             })
         });
 
-
         $scope.bookmark = function(index){
             var item = $scope.items[index];
-            if(!item.isSelected){
-                $scope.$root.$emit('addbookmark', item.id,function(){
-                    $scope.items[index].isSelected = true;
+            if(!item.liked){
+                $scope.$root.$emit('addbookmark', item,function(){
+                    $scope.items[index].liked = true;
                 });
             }else{
-                $scope.$root.$emit('removebookmark', item.id,function(){
-                    $scope.items[index].isSelected = false;
+                $scope.$root.$emit('removebookmark', item,function(){
+                    $scope.items[index].liked = false;
                 });
             }
         }

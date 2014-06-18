@@ -2,9 +2,9 @@
     app.controller('filter',function($scope,$location,$rootScope,getJSON) {
         var _getFilter = function(){
             var filter,defaultFilter = {
-                trigger : 0,
-                relevance : 0,
-                search : "hello"
+                agentid : -1,
+                relevance : 40,
+                search : ""
             };
             filter = u._.isEmpty($location.search()) ?   defaultFilter : $location.search();
             return filter;
@@ -13,8 +13,8 @@
         var filter = _getFilter();
         $scope.filter = filter;
 
-        $scope.$watch( "filter.trigger", function(val) {
-            filter.trigger = val;
+        $scope.$watch( "filter.agentid", function(val) {
+            filter.agentid = val;
             $location.search(filter);
         });
 

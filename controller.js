@@ -16,11 +16,17 @@ module.exports = {
     renderType : "0",
     getObjectString : function(data){
         //将对象变成，标签属性值
-        return JSON.stringify(data).replace(/"/g,"'");
+        return JSON.stringify(data).replace(/'/g,"\\'").replace(/"/g,"'");
     },
     getWidgetData : function(callback){
         callback({});
     },
+/*
+    /home/news
+
+    列表数据 news_data
+    列表序列化数据 news_data_str
+    */
     getListData : function(data){
         var obj = {},
             name = this.pathname.split("\\");
