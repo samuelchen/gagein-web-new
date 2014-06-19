@@ -103,8 +103,8 @@ module.exports = {
                         var items = _str.trim(child_ele.attr("ng-repeat").split("in")[1]);
                         var items_data = _str.trim(parent_ele.attr("ng-init").split("=")[1]).replace(/({{{|}}}|_str)/g,'');
 
-                        parent_c_ele.removeAttr("ng-init").attr("ng-hide",items);
-                        parent_ele.attr("ng-show",items);
+                        parent_c_ele.removeAttr("ng-init").attr("ng-hide","!!" + items);
+                        parent_ele.attr("ng-show","!!" + items);
                         child_c_ele.removeAttr("ng-repeat")
 
                         var content = parent_c_ele.html();
@@ -113,7 +113,7 @@ module.exports = {
                         parent_ele.before(parent_c_ele);
                         json["html"] = $.html();
                     }else{
-                        parent_ele.removeAttr("ng-init");
+                        parent_ele.attr("ng-init" , "init_noajax = true");
                         json["html"] = $.html();
                     }
                 }
@@ -170,15 +170,44 @@ module.exports = {
             $("head").append(jscode);
         }
     },
+    parseTemplate : function($){
+        var t_name = $("extend").attr("name") + ".html";
+        var pathname = this.pathname;
+        pathname = path.resolve(this.pathname,"../template");
+
+        var tpl = fs.readFileSync(pathname +"/"+ t_name, 'utf8');
+        $t = query.load(tpl);
+        var blocks = $t("block");
+
+        _.each(blocks,function(n){
+            var block = $t(n)
+            var name =  block.attr("name");
+            var b = $("block[name="+name+"]");
+            if(b[0]){
+                block.replaceWith(b.html());
+            }else{
+                block.replaceWith(block.html());
+            }
+        })
+
+        return $t.html();
+    },
     getPageContent : function(req , res){
 
         var json = this.getResource(this.pathname);
         var self = this;
         var $ = query.load(json.html);
+
+        //模板继承
+        if($("extend,block")[0]){
+            $ = query.load(this.parseTemplate($));
+        }
+
         var widgets = $("widget");
         //只识别小写
-        var renderType = $("body").attr("rendertype") || "0";
-        $("body").removeAttr("rendertype");
+        var renderEle = $("div[rendertype]");
+        var renderType = renderEle.attr("rendertype") || "0";
+        renderEle.remove();
 
 
         var widgets_arr = [];

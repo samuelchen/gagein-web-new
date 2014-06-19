@@ -1,30 +1,17 @@
-<!doctype html>
-<html lang="en" ng-app="app">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <title>{{_('Gagein - Google Alerts on Steroids')}}</title>
-    <meta name="description" content="gagein web new prototype">
+<extend name="main" />
 
-    <link rel="stylesheet" href="{{{config.host.protocol}}}://{{{config.host.static}}}/css/base.css" type="text/css">
-    <link rel="stylesheet" href="{{{config.host.protocol}}}://{{{config.host.static}}}/css/web/member.css" type="text/css">
-    <script>{{{baseurl}}}</script>
-    <script src="{{{config.host.protocol}}}://{{{config.host.static}}}/js/require2.1.11.js"></script>
-    <script src="{{{config.host.protocol}}}://{{{config.host.static}}}/js/base.js" ></script>
-</head>
-<body renderType="0">
-<div class="fclear"><widget>common.header</widget></div>
-<div class="content fclear">
-    <div class="content-nav"></div>
-    <div class="content-cnt">
-        <widget>home.filters</widget>
-        <widget sync="true">home.news</widget>
-        <widget sync="true">home.bookmarks</widget>
+<block name="config">
+    <div renderType="1"></div>
+</block>
+
+<block name="content">
+    <div class="content fclear">
+        <div class="content-nav"></div>
+        <div class="content-cnt">
+            <widget>home.filters</widget>
+            <widget sync="true">home.news</widget>
+            <widget sync="true">home.bookmarks</widget>
+        </div>
     </div>
-</div>
-<div style="display: none">
-    <widget>common.footer</widget>
-</div>
-</body>
-</html>
+</block>
 

@@ -28,11 +28,10 @@
         });
         $scope.$emit('newupdate');
 
-        //初始化不调用请求
-        var init_flag = false;
         $rootScope.$on('$locationChangeSuccess', function(){
-            if(!init_flag) {
-                init_flag = true;
+            //初始化不调用请求
+            if(!$scope.init_noajax) {
+                $scope.init_noajax = true;
                 return;
             }
             var filters = $location.search();
